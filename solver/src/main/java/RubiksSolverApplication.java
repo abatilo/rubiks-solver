@@ -1,10 +1,46 @@
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 public class RubiksSolverApplication {
   public static void main(String[] args) {
     printCube(numbers);
-    printCube(B(numbers));
-    printCube(B_PRIME(B(numbers)));
+    List<String[]> arr = new ArrayList<>();
+    arr.add(numbers);
+    arr.stream()
+      .map(RubiksSolverApplication::D)
+      .map(RubiksSolverApplication::D)
+      .map(RubiksSolverApplication::L)
+      .map(RubiksSolverApplication::R)
+      .map(RubiksSolverApplication::U_PRIME)
+      // .map(RubiksSolverApplication::B)
+      // .map(RubiksSolverApplication::B)
+      // .map(RubiksSolverApplication::D)
+      // .map(RubiksSolverApplication::D)
+      // .map(RubiksSolverApplication::B)
+      // .map(RubiksSolverApplication::B)
+      // .map(RubiksSolverApplication::R)
+      // .map(RubiksSolverApplication::L)
+      // .map(RubiksSolverApplication::L)
+      // .map(RubiksSolverApplication::B)
+      // .map(RubiksSolverApplication::D)
+      // .map(RubiksSolverApplication::B)
+      // .map(RubiksSolverApplication::L_PRIME)
+      // .map(RubiksSolverApplication::D_PRIME)
+      // .map(RubiksSolverApplication::R_PRIME)
+      // .map(RubiksSolverApplication::F_PRIME)
+      // .map(RubiksSolverApplication::U)
+      // .map(RubiksSolverApplication::F)
+      // .map(RubiksSolverApplication::F)
+      // .map(RubiksSolverApplication::U_PRIME)
+      // .map(RubiksSolverApplication::L_PRIME)
+      // .map(RubiksSolverApplication::F)
+      // .map(RubiksSolverApplication::B_PRIME)
+      // .map(RubiksSolverApplication::U_PRIME)
+      // .map(RubiksSolverApplication::R)
+      // .map(RubiksSolverApplication::B_PRIME)
+      // .map(RubiksSolverApplication::B_PRIME)
+      .forEach(RubiksSolverApplication::printCube);
   }
 
   private static String[] cube = new String[] {
