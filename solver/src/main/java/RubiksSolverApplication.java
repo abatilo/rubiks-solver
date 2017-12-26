@@ -41,6 +41,26 @@ public class RubiksSolverApplication {
 
   private static char[] U(char[] cube) {
     char[] copy = copyToNew(cube);
+    return copy;
+  }
+
+  private static char[] U_PRIME(char[] cube) {
+    char[] copy = copyToNew(cube);
+    return copy;
+  }
+
+  private static char[] D(char[] cube) {
+    char[] copy = copyToNew(cube);
+    return copy;
+  }
+
+  private static char[] D_PRIME(char[] cube) {
+    char[] copy = copyToNew(cube);
+    return copy;
+  }
+
+  private static char[] F(char[] cube) {
+    char[] copy = copyToNew(cube);
     //    27 28 29
     // 38 39 40 41 42
     // 50 51 52 53 54
@@ -78,7 +98,7 @@ public class RubiksSolverApplication {
     return copy;
   }
 
-  private static char[] U_PRIME(char[] cube) {
+  private static char[] F_PRIME(char[] cube) {
     char[] copy = copyToNew(cube);
     //    27 28 29
     // 38 39 40 41 42
@@ -113,26 +133,6 @@ public class RubiksSolverApplication {
     copy[53] = copy[64];
     copy[64] = copy[51];
     copy[51] = innerEdgeTemp;
-    return copy;
-  }
-
-  private static char[] D(char[] cube) {
-    char[] copy = copyToNew(cube);
-    return copy;
-  }
-
-  private static char[] D_PRIME(char[] cube) {
-    char[] copy = copyToNew(cube);
-    return copy;
-  }
-
-  private static char[] F(char[] cube) {
-    char[] copy = copyToNew(cube);
-    return copy;
-  }
-
-  private static char[] F_PRIME(char[] cube) {
-    char[] copy = copyToNew(cube);
     return copy;
   }
 
