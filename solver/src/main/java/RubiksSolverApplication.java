@@ -612,7 +612,7 @@ public class RubiksSolverApplication {
   private static void printCube(String[] cube) {
     for (int j = 0; j < 9; ++j) {
       for (int i = 0; i < 12; ++i) {
-        System.out.print(cube[12 * j + i]);
+        System.out.print(String.format("%1$3s", cube[12 * j + i]));
         System.out.print(" ");
       }
       System.out.println();
