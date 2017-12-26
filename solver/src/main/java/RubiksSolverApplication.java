@@ -385,30 +385,209 @@ public class RubiksSolverApplication {
 
   private static String[] L(String[] cube) {
     String[] copy = copyOf(cube);
-  //                       3
-  //                       15
-  //                       27
-  //  36     37     38     39
-  //  48     49     50     51
-  //  60     61     62     63
-  //                       75
-  //                       87
-  //                       99
+    //                       3
+    //                       15
+    //                       27
+    //  36     37     38     39                                                        47
+    //  48     49     50     51                                                        59
+    //  60     61     62     63                                                        71
+    //                       75
+    //                       87
+    //                       99
+    //
+    //                       71
+    //                       59
+    //                       47
+    //  60     48     36     3                                                         99
+    //  61     49     37     15                                                        87
+    //  62     50     38     27                                                        75
+    //                       39
+    //                       51
+    //                       63
+    String outerEdgesTemp1 = copy[3];
+    String outerEdgesTemp2 = copy[15];
+    String outerEdgesTemp3 = copy[27];
+    copy[3] = copy[71];
+    copy[71] = copy[75];
+    copy[75] = copy[39];
+    copy[39] = outerEdgesTemp1;
+    copy[15] = copy[59];
+    copy[59] = copy[87];
+    copy[87] = copy[51];
+    copy[51] = outerEdgesTemp2;
+    copy[27] = copy[47];
+    copy[47] = copy[99];
+    copy[99] = copy[63];
+    copy[63] = outerEdgesTemp3;
+
+    String innerCornerTemp = copy[36];
+    copy[36] = copy[60];
+    copy[60] = copy[62];
+    copy[62] = copy[38];
+    copy[38] = innerCornerTemp;
+
+    String innerEdgeTemp = copy[37];
+    copy[37] = copy[48];
+    copy[48] = copy[61];
+    copy[61] = copy[50];
+    copy[50] = innerEdgeTemp;
+
     return copy;
   }
 
   private static String[] L_PRIME(String[] cube) {
     String[] copy = copyOf(cube);
+    //                       3
+    //                       15
+    //                       27
+    //  36     37     38     39                                                        47
+    //  48     49     50     51                                                        59
+    //  60     61     62     63                                                        71
+    //                       75
+    //                       87
+    //                       99
+    //
+    //                       39
+    //                       51
+    //                       63
+    //  38     50     62     75                                                        27
+    //  37     49     61     87                                                        15
+    //  36     48     60     99                                                        3
+    //                       71
+    //                       59
+    //                       47
+    String outerEdgesTemp1 = copy[3];
+    String outerEdgesTemp2 = copy[15];
+    String outerEdgesTemp3 = copy[27];
+    copy[3] = copy[39];
+    copy[39] = copy[75];
+    copy[75] = copy[71];
+    copy[71] = outerEdgesTemp1;
+    copy[15] = copy[51];
+    copy[51] = copy[87];
+    copy[87] = copy[59];
+    copy[59] = outerEdgesTemp2;
+    copy[27] = copy[63];
+    copy[63] = copy[99];
+    copy[99] = copy[47];
+    copy[47] = outerEdgesTemp3;
+
+    String innerCornerTemp = copy[36];
+    copy[36] = copy[38];
+    copy[38] = copy[62];
+    copy[62] = copy[60];
+    copy[60] = innerCornerTemp;
+
+    String innerEdgeTemp = copy[37];
+    copy[37] = copy[50];
+    copy[50] = copy[61];
+    copy[61] = copy[48];
+    copy[48] = innerEdgeTemp;
+
     return copy;
   }
 
     private static String[] R(String[] cube) {
       String[] copy = copyOf(cube);
+      //                                      5
+      //                                      17
+      //                                      29
+      //                                      41      42     43     44     45
+      //                                      53      54     55     56     57
+      //                                      65      66     67     68     69
+      //                                      77
+      //                                      89
+      //                                      101
+      //
+      //                                      41
+      //                                      53
+      //                                      65
+      //                                      77      66     54     42     29
+      //                                      89      67     55     43     17
+      //                                      101     68     56     44     5
+      //                                      69
+      //                                      57
+      //                                      45
+      String outerEdgesTemp1 = copy[5];
+      String outerEdgesTemp2 = copy[17];
+      String outerEdgesTemp3 = copy[29];
+      copy[5] = copy[41];
+      copy[41] = copy[77];
+      copy[77] = copy[69];
+      copy[69] = outerEdgesTemp1;
+      copy[17] = copy[53];
+      copy[53] = copy[89];
+      copy[89] = copy[57];
+      copy[57] = outerEdgesTemp2;
+      copy[29] = copy[65];
+      copy[65] = copy[101];
+      copy[101] = copy[45];
+      copy[45] = outerEdgesTemp3;
+
+      String innerCornerTemp = copy[42];
+      copy[42] = copy[66];
+      copy[66] = copy[68];
+      copy[68] = copy[44];
+      copy[44] = innerCornerTemp;
+
+      String innerEdgeTemp = copy[43];
+      copy[43] = copy[54];
+      copy[54] = copy[67];
+      copy[67] = copy[56];
+      copy[56] = innerEdgeTemp;
+
       return copy;
     }
 
     private static String[] R_PRIME(String[] cube) {
       String[] copy = copyOf(cube);
+      //                                      5
+      //                                      17
+      //                                      29
+      //                                      41      42     43     44     45
+      //                                      53      54     55     56     57
+      //                                      65      66     67     68     69
+      //                                      77
+      //                                      89
+      //                                      101
+      //
+      //                                      69
+      //                                      57
+      //                                      45
+      //                                      5       44     56     68     101
+      //                                      17      43     55     67     89
+      //                                      29      42     54     66     77
+      //                                      41
+      //                                      53
+      //                                      65
+      String outerEdgesTemp1 = copy[5];
+      String outerEdgesTemp2 = copy[17];
+      String outerEdgesTemp3 = copy[29];
+      copy[5] = copy[69];
+      copy[69] = copy[77];
+      copy[77] = copy[41];
+      copy[41] = outerEdgesTemp1;
+      copy[17] = copy[57];
+      copy[57] = copy[89];
+      copy[89] = copy[53];
+      copy[53] = outerEdgesTemp2;
+      copy[29] = copy[45];
+      copy[45] = copy[101];
+      copy[101] = copy[65];
+      copy[65] = outerEdgesTemp3;
+
+      String innerCornerTemp = copy[42];
+      copy[42] = copy[44];
+      copy[44] = copy[68];
+      copy[68] = copy[66];
+      copy[66] = innerCornerTemp;
+
+      String innerEdgeTemp = copy[43];
+      copy[43] = copy[56];
+      copy[56] = copy[67];
+      copy[67] = copy[54];
+      copy[54] = innerEdgeTemp;
+
       return copy;
     }
 
