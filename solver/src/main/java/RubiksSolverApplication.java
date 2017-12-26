@@ -1,46 +1,47 @@
+import java.util.Arrays;
+
 public class RubiksSolverApplication {
   public static void main(String[] args) {
-    printCube(cube);
-    printCube(U(cube));
-    printCube(U_PRIME(U(cube)));
+    printCube(numbers);
+    printCube(B(numbers));
+    printCube(B_PRIME(B(numbers)));
   }
 
-  private static char[] cube = new char[] {
-    ' ', ' ', ' ', 'r', 'r', 'r', ' ', ' ', ' ', ' ', ' ', ' ',
-    ' ', ' ', ' ', 'r', 'r', 'r', ' ', ' ', ' ', ' ', ' ', ' ',
-    ' ', ' ', ' ', 'r', 'r', 'r', ' ', ' ', ' ', ' ', ' ', ' ',
-    'b', 'b', 'b', 'w', 'w', 'w', 'g', 'g', 'g', 'y', 'y', 'y',
-    'b', 'b', 'b', 'w', 'w', 'w', 'g', 'g', 'g', 'y', 'y', 'y',
-    'b', 'b', 'b', 'w', 'w', 'w', 'g', 'g', 'g', 'y', 'y', 'y',
-    ' ', ' ', ' ', 'o', 'o', 'o', ' ', ' ', ' ', ' ', ' ', ' ',
-    ' ', ' ', ' ', 'o', 'o', 'o', ' ', ' ', ' ', ' ', ' ', ' ',
-    ' ', ' ', ' ', 'o', 'o', 'o', ' ', ' ', ' ', ' ', ' ', ' ',
+  private static String[] cube = new String[] {
+    " ", " ", " ", "r", "r", "r", " ", " ", " ", " ", " ", " ",
+    " ", " ", " ", "r", "r", "r", " ", " ", " ", " ", " ", " ",
+    " ", " ", " ", "r", "r", "r", " ", " ", " ", " ", " ", " ",
+    "b", "b", "b", "w", "w", "w", "g", "g", "g", "y", "y", "y",
+    "b", "b", "b", "w", "w", "w", "g", "g", "g", "y", "y", "y",
+    "b", "b", "b", "w", "w", "w", "g", "g", "g", "y", "y", "y",
+    " ", " ", " ", "o", "o", "o", " ", " ", " ", " ", " ", " ",
+    " ", " ", " ", "o", "o", "o", " ", " ", " ", " ", " ", " ",
+    " ", " ", " ", "o", "o", "o", " ", " ", " ", " ", " ", " ",
   };
 
-  private static final char[] SOLUTION = new char[] {
-    ' ', ' ', ' ', 'r', 'r', 'r', ' ', ' ', ' ', ' ', ' ', ' ',
-    ' ', ' ', ' ', 'r', 'r', 'r', ' ', ' ', ' ', ' ', ' ', ' ',
-    ' ', ' ', ' ', 'r', 'r', 'r', ' ', ' ', ' ', ' ', ' ', ' ',
-    'b', 'b', 'b', 'w', 'w', 'w', 'g', 'g', 'g', 'y', 'y', 'y',
-    'b', 'b', 'b', 'w', 'w', 'w', 'g', 'g', 'g', 'y', 'y', 'y',
-    'b', 'b', 'b', 'w', 'w', 'w', 'g', 'g', 'g', 'y', 'y', 'y',
-    ' ', ' ', ' ', 'o', 'o', 'o', ' ', ' ', ' ', ' ', ' ', ' ',
-    ' ', ' ', ' ', 'o', 'o', 'o', ' ', ' ', ' ', ' ', ' ', ' ',
-    ' ', ' ', ' ', 'o', 'o', 'o', ' ', ' ', ' ', ' ', ' ', ' ',
+  private static String[] numbers = new String[] {
+    " "  , " "  , " "  , "3"  , "4"   , "5"   , " "  , " "  , " "  , " "  , " "  , " "  ,
+    " "  , " "  , " "  , "15" , "16"  , "17"  , " "  , " "  , " "  , " "  , " "  , " "  ,
+    " "  , " "  , " "  , "27" , "28"  , "29"  , " "  , " "  , " "  , " "  , " "  , " "  ,
+    "36" , "37" , "38" , "39" , "40"  , "41"  , "42" , "43" , "44" , "45" , "46" , "47" ,
+    "48" , "49" , "50" , "51" , "52"  , "53"  , "54" , "55" , "56" , "57" , "58" , "59" ,
+    "60" , "61" , "62" , "63" , "64"  , "65"  , "66" , "67" , "68" , "69" , "70" , "71" ,
+    " "  , " "  , " "  , "75" , "76"  , "77"  , " "  , " "  , " "  , " "  , " "  , " "  ,
+    " "  , " "  , " "  , "87" , "88"  , "89"  , " "  , " "  , " "  , " "  , " "  , " "  ,
+    " "  , " "  , " "  , "99" , "100" , "101" , " "  , " "  , " "  , " "  , " "  , " "  ,
   };
+  //                       3      4       5
+  //                       15     16      17
+  //                       27     28      29
+  //  36     37     38     39     40      41      42     43     44     45     46     47
+  //  48     49     50     51     52      53      54     55     56     57     58     59
+  //  60     61     62     63     64      65      66     67     68     69     70     71
+  //                       75     76      77
+  //                       87     88      89
+  //                       99     100     101
 
-  private static void printCube(char[] cube) {
-    for (int j = 0; j < 9; ++j) {
-      for (int i = 0; i < 12; ++i) {
-        System.out.print(cube[12 * j + i]);
-      }
-      System.out.println();
-    }
-    System.out.println();
-  }
-
-  private static char[] U(char[] cube) {
-    char[] copy = copyToNew(cube);
+  private static String[] U(String[] cube) {
+    String[] copy = copyOf(cube);
     //           3  4  5
     //          15 16 17
     //          27 28 29
@@ -51,9 +52,9 @@ public class RubiksSolverApplication {
     //          29 17  5
     // 39 40 41 42 43 44 45 46 47 36 37 38
 
-    char outerEdgesTemp1 = copy[36];
-    char outerEdgesTemp2 = copy[37];
-    char outerEdgesTemp3 = copy[38];
+    String outerEdgesTemp1 = copy[36];
+    String outerEdgesTemp2 = copy[37];
+    String outerEdgesTemp3 = copy[38];
     for (int i = 36; i < 45; ++i) {
       copy[i] = copy[i + 3];
     }
@@ -61,13 +62,13 @@ public class RubiksSolverApplication {
     copy[46] = outerEdgesTemp2;
     copy[47] = outerEdgesTemp3;
 
-    char innerCornerTemp = copy[3];
+    String innerCornerTemp = copy[3];
     copy[3] = copy[27];
     copy[27] = copy[29];
     copy[29] = copy[5];
     copy[5] = innerCornerTemp;
 
-    char innerEdgeTemp = copy[4];
+    String innerEdgeTemp = copy[4];
     copy[4] = copy[15];
     copy[15] = copy[28];
     copy[28] = copy[17];
@@ -76,8 +77,8 @@ public class RubiksSolverApplication {
     return copy;
   }
 
-  private static char[] U_PRIME(char[] cube) {
-    char[] copy = copyToNew(cube);
+  private static String[] U_PRIME(String[] cube) {
+    String[] copy = copyOf(cube);
     //           3  4  5
     //          15 16 17
     //          27 28 29
@@ -88,9 +89,9 @@ public class RubiksSolverApplication {
     //           3 15 27
     // 45 46 47 36 37 38 39 40 41 42 43 44
 
-    char outerEdgesTemp1 = copy[45];
-    char outerEdgesTemp2 = copy[46];
-    char outerEdgesTemp3 = copy[47];
+    String outerEdgesTemp1 = copy[45];
+    String outerEdgesTemp2 = copy[46];
+    String outerEdgesTemp3 = copy[47];
     for (int i = 47; i >= 39; --i) {
       copy[i] = copy[i - 3];
     }
@@ -98,13 +99,13 @@ public class RubiksSolverApplication {
     copy[37] = outerEdgesTemp2;
     copy[38] = outerEdgesTemp3;
 
-    char innerCornerTemp = copy[3];
+    String innerCornerTemp = copy[3];
     copy[3] = copy[5];
     copy[5] = copy[29];
     copy[29] = copy[27];
     copy[27] = innerCornerTemp;
 
-    char innerEdgeTemp = copy[4];
+    String innerEdgeTemp = copy[4];
     copy[4] = copy[17];
     copy[17] = copy[28];
     copy[28] = copy[15];
@@ -113,18 +114,82 @@ public class RubiksSolverApplication {
     return copy;
   }
 
-  private static char[] D(char[] cube) {
-    char[] copy = copyToNew(cube);
+  private static String[] D(String[] cube) {
+    String[] copy = copyOf(cube);
+    // 60 61 62  63  64  65 66 67 68 69 70 71
+    //           75  76  77
+    //           87  88  89
+    //           99 100 101
+    //
+    // 69 70 71 60  61 62 63 64 65 66 67 68
+    //          99  87 75
+    //          100 88 76
+    //          101 89 77
+
+    String outerEdgesTemp1 = copy[69];
+    String outerEdgesTemp2 = copy[70];
+    String outerEdgesTemp3 = copy[71];
+    for (int i = 71; i >= 60; --i) {
+      copy[i] = copy[i - 3];
+    }
+    copy[60] = outerEdgesTemp1;
+    copy[61] = outerEdgesTemp2;
+    copy[62] = outerEdgesTemp3;
+
+    String innerCornerTemp = copy[75];
+    copy[75] = copy[99];
+    copy[99] = copy[101];
+    copy[101] = copy[77];
+    copy[77] = innerCornerTemp;
+
+    String innerEdgeTemp = copy[76];
+    copy[76] = copy[87];
+    copy[87] = copy[100];
+    copy[100] = copy[89];
+    copy[89] = innerEdgeTemp;
+
     return copy;
   }
 
-  private static char[] D_PRIME(char[] cube) {
-    char[] copy = copyToNew(cube);
+  private static String[] D_PRIME(String[] cube) {
+    String[] copy = copyOf(cube);
+    // 60 61 62 63 64  65 66 67 68 69 70 71
+    //          75 76  77
+    //          87 88  89
+    //          99 100 101
+    //
+    // 63 64 65 66 67 68  69 70 71 60 61 62
+    //          77 89 101
+    //          76 88 100
+    //          75 87 99
+
+    String outerEdgesTemp1 = copy[60];
+    String outerEdgesTemp2 = copy[61];
+    String outerEdgesTemp3 = copy[62];
+    for (int i = 60; i < 69; ++i) {
+      copy[i] = copy[i + 3];
+    }
+    copy[69] = outerEdgesTemp1;
+    copy[70] = outerEdgesTemp2;
+    copy[71] = outerEdgesTemp3;
+
+    String innerCornerTemp = copy[75];
+    copy[75] = copy[77];
+    copy[77] = copy[101];
+    copy[101] = copy[99];
+    copy[99] = innerCornerTemp;
+
+    String innerEdgeTemp = copy[76];
+    copy[76] = copy[89];
+    copy[89] = copy[100];
+    copy[100] = copy[87];
+    copy[87] = innerEdgeTemp;
+
     return copy;
   }
 
-  private static char[] F(char[] cube) {
-    char[] copy = copyToNew(cube);
+  private static String[] F(String[] cube) {
+    String[] copy = copyOf(cube);
     //    27 28 29
     // 38 39 40 41 42
     // 50 51 52 53 54
@@ -137,9 +202,9 @@ public class RubiksSolverApplication {
     // 77 65 53 41 29
     //    66 54 42
 
-    char outerEdgesTemp1 = copy[27];
-    char outerEdgesTemp2 = copy[28];
-    char outerEdgesTemp3 = copy[29];
+    String outerEdgesTemp1 = copy[27];
+    String outerEdgesTemp2 = copy[28];
+    String outerEdgesTemp3 = copy[29];
     copy[29] = copy[38];
     copy[28] = copy[50];
     copy[27] = copy[62];
@@ -153,13 +218,13 @@ public class RubiksSolverApplication {
     copy[54] = outerEdgesTemp2;
     copy[66] = outerEdgesTemp3;
 
-    char innerCornerTemp = copy[41];
+    String innerCornerTemp = copy[41];
     copy[41] = copy[39];
     copy[39] = copy[63];
     copy[63] = copy[65];
     copy[65] = innerCornerTemp;
 
-    char innerEdgeTemp = copy[40];
+    String innerEdgeTemp = copy[40];
     copy[40] = copy[51];
     copy[51] = copy[64];
     copy[64] = copy[53];
@@ -168,8 +233,8 @@ public class RubiksSolverApplication {
     return copy;
   }
 
-  private static char[] F_PRIME(char[] cube) {
-    char[] copy = copyToNew(cube);
+  private static String[] F_PRIME(String[] cube) {
+    String[] copy = copyOf(cube);
     //    27 28 29
     // 38 39 40 41 42
     // 50 51 52 53 54
@@ -182,9 +247,9 @@ public class RubiksSolverApplication {
     // 27 39 51 63 75
     //    38 50 62
 
-    char outerEdgesTemp1 = copy[27];
-    char outerEdgesTemp2 = copy[28];
-    char outerEdgesTemp3 = copy[29];
+    String outerEdgesTemp1 = copy[27];
+    String outerEdgesTemp2 = copy[28];
+    String outerEdgesTemp3 = copy[29];
     copy[27] = copy[42];
     copy[28] = copy[54];
     copy[29] = copy[66];
@@ -198,13 +263,13 @@ public class RubiksSolverApplication {
     copy[50] = outerEdgesTemp2;
     copy[62] = outerEdgesTemp1;
 
-    char innerCornerTemp = copy[41];
+    String innerCornerTemp = copy[41];
     copy[41] = copy[65];
     copy[65] = copy[63];
     copy[63] = copy[39];
     copy[39] = innerCornerTemp;
 
-    char innerEdgeTemp = copy[40];
+    String innerEdgeTemp = copy[40];
     copy[40] = copy[53];
     copy[53] = copy[64];
     copy[64] = copy[51];
@@ -212,41 +277,171 @@ public class RubiksSolverApplication {
     return copy;
   }
 
-  private static char[] B(char[] cube) {
-    char[] copy = copyToNew(cube);
+  private static String[] B(String[] cube) {
+    String[] copy = copyOf(cube);
+    //                       3      4       5
+    //
+    //
+    //  36                                                        44     45     46     47
+    //  48                                                        56     57     58     59
+    //  60                                                        68     69     70     71
+    //
+    //
+    //                       99     100     101
+    //
+    //                       44     56      68
+    //
+    //
+    //   5                                                       101     69     57     45
+    //   4                                                       100     70     58     46
+    //   3                                                        99     71     59     47
+    //
+    //
+    //                       36     48     60
+
+    String outerEdgesTemp1 = copy[3];
+    String outerEdgesTemp2 = copy[4];
+    String outerEdgesTemp3 = copy[5];
+    copy[3] = copy[44];
+    copy[44] = copy[101];
+    copy[101] = copy[60];
+    copy[60] = outerEdgesTemp1;
+    copy[4] = copy[56];
+    copy[56] = copy[100];
+    copy[100] = copy[48];
+    copy[48] = outerEdgesTemp2;
+    copy[5] = copy[68];
+    copy[68] = copy[99];
+    copy[99] = copy[36];
+    copy[36] = outerEdgesTemp3;
+
+    String innerCornerTemp = copy[45];
+    copy[45] = copy[69];
+    copy[69] = copy[71];
+    copy[71] = copy[47];
+    copy[47] = innerCornerTemp;
+
+    String innerEdgeTemp = copy[46];
+    copy[46] = copy[57];
+    copy[57] = copy[70];
+    copy[70] = copy[59];
+    copy[59] = innerEdgeTemp;
+
     return copy;
   }
 
-  private static char[] B_PRIME(char[] cube) {
-    char[] copy = copyToNew(cube);
+  private static String[] B_PRIME(String[] cube) {
+    String[] copy = copyOf(cube);
+    //                       3      4       5
+    //
+    //
+    //  36                                                        44     45     46     47
+    //  48                                                        56     57     58     59
+    //  60                                                        68     69     70     71
+    //
+    //
+    //                       99     100     101
+    //
+    //                       60      48     36
+    //
+    //
+    //  99                                                         3     47     59     71
+    //  100                                                        4     46     58     70
+    //  101                                                        5     45     57     69
+    //
+    //
+    //                       68      56     44
+
+    String outerEdgesTemp1 = copy[3];
+    String outerEdgesTemp2 = copy[4];
+    String outerEdgesTemp3 = copy[5];
+    copy[3] = copy[60];
+    copy[60] = copy[101];
+    copy[101] = copy[44];
+    copy[44] = outerEdgesTemp1;
+    copy[4] = copy[48];
+    copy[48] = copy[100];
+    copy[100] = copy[56];
+    copy[56] = outerEdgesTemp2;
+    copy[5] = copy[36];
+    copy[36] = copy[99];
+    copy[99] = copy[68];
+    copy[68] = outerEdgesTemp3;
+
+    String innerCornerTemp = copy[45];
+    copy[45] = copy[47];
+    copy[47] = copy[71];
+    copy[71] = copy[69];
+    copy[69] = innerCornerTemp;
+
+    String innerEdgeTemp = copy[46];
+    copy[46] = copy[59];
+    copy[59] = copy[70];
+    copy[70] = copy[57];
+    copy[57] = innerEdgeTemp;
+
     return copy;
   }
 
-  private static char[] L(char[] cube) {
-    char[] copy = copyToNew(cube);
+  private static String[] L(String[] cube) {
+    String[] copy = copyOf(cube);
+  //                       3
+  //                       15
+  //                       27
+  //  36     37     38     39
+  //  48     49     50     51
+  //  60     61     62     63
+  //                       75
+  //                       87
+  //                       99
     return copy;
   }
 
-  private static char[] L_PRIME(char[] cube) {
-    char[] copy = copyToNew(cube);
+  private static String[] L_PRIME(String[] cube) {
+    String[] copy = copyOf(cube);
     return copy;
   }
 
-    private static char[] R(char[] cube) {
-      char[] copy = copyToNew(cube);
+    private static String[] R(String[] cube) {
+      String[] copy = copyOf(cube);
       return copy;
     }
 
-    private static char[] R_PRIME(char[] cube) {
-      char[] copy = copyToNew(cube);
+    private static String[] R_PRIME(String[] cube) {
+      String[] copy = copyOf(cube);
       return copy;
     }
 
-  private static char[] copyToNew(char[] cube) {
-    char[] copy = new char[cube.length];
-    for (int i = 0; i < copy.length; ++i) {
-      copy[i] = cube[i];
-    }
+  private static String[] copyOf(String[] cube) {
+    String[] copy = new String[cube.length];
+    System.arraycopy(cube, 0, copy, 0, cube.length);
     return copy;
+  }
+
+  private static final String[] SOLUTION = new String[] {
+    " ", " ", " ", "r", "r", "r", " ", " ", " ", " ", " ", " ",
+    " ", " ", " ", "r", "r", "r", " ", " ", " ", " ", " ", " ",
+    " ", " ", " ", "r", "r", "r", " ", " ", " ", " ", " ", " ",
+    "b", "b", "b", "w", "w", "w", "g", "g", "g", "y", "y", "y",
+    "b", "b", "b", "w", "w", "X", "g", "g", "g", "y", "y", "y",
+    "b", "b", "b", "w", "w", "w", "g", "g", "g", "y", "y", "y",
+    " ", " ", " ", "o", "o", "o", " ", " ", " ", " ", " ", " ",
+    " ", " ", " ", "o", "o", "o", " ", " ", " ", " ", " ", " ",
+    " ", " ", " ", "o", "o", "o", " ", " ", " ", " ", " ", " ",
+  };
+
+  private static void printCube(String[] cube) {
+    for (int j = 0; j < 9; ++j) {
+      for (int i = 0; i < 12; ++i) {
+        System.out.print(cube[12 * j + i]);
+        System.out.print(" ");
+      }
+      System.out.println();
+    }
+    System.out.println();
+  }
+
+  private static boolean cubeEquals(String[] cube1, String[] cube2) {
+    return Arrays.equals(cube1, cube2);
   }
 }
