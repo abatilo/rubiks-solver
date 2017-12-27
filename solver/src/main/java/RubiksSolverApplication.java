@@ -92,28 +92,19 @@ public class RubiksSolverApplication {
   //                       51     52     53
 
   private static char[] correctness = new char[] {
- 'o', 'y', 'w',
- 'g', 'r', 'o',
- 'g', 'g', 'w',
- 'b', 'o', 'o', 'y', 'w', 'r', 'b', 'b', 'o', 'g', 'o', 'w',
- 'r', 'b', 'g', 'r', 'w', 'w', 'b', 'g', 'r', 'w', 'y', 'y',
- 'y', 'g', 'o', 'y', 'b', 'r', 'g', 'o', 'r', 'y', 'b', 'b',
- 'b', 'y', 'w',
- 'y', 'o', 'w',
- 'r', 'r', 'g'
+    'o', 'y', 'w',
+    'g', 'r', 'o',
+    'g', 'g', 'w',
+    'b', 'o', 'o', 'y', 'w', 'r', 'b', 'b', 'o', 'g', 'o', 'w',
+    'r', 'b', 'g', 'r', 'w', 'w', 'b', 'g', 'r', 'w', 'y', 'y',
+    'y', 'g', 'o', 'y', 'b', 'r', 'g', 'o', 'r', 'y', 'b', 'b',
+    'b', 'y', 'w',
+    'y', 'o', 'w',
+    'r', 'r', 'g'
   };
 
   private static char[] U(char[] cube) {
     char[] copy = copyOf(cube);
-    //           3  4  5
-    //          15 16 17
-    //          27 28 29
-    // 36 37 38 39 40 41 42 43 44 45 46 47
-    //
-    //          27 15  3
-    //          28 16  4
-    //          29 17  5
-    // 39 40 41 42 43 44 45 46 47 36 37 38
 
     char outerEdgesTemp1 = copy[9];
     char outerEdgesTemp2 = copy[10];
@@ -142,15 +133,6 @@ public class RubiksSolverApplication {
 
   private static char[] U_PRIME(char[] cube) {
     char[] copy = copyOf(cube);
-    //           3  4  5
-    //          15 16 17
-    //          27 28 29
-    // 36 37 38 39 40 41 42 43 44 45 46 47
-    //
-    //           5 17 29
-    //           4 16 28
-    //           3 15 27
-    // 45 46 47 36 37 38 39 40 41 42 43 44
 
     char outerEdgesTemp1 = copy[18];
     char outerEdgesTemp2 = copy[19];
@@ -179,15 +161,6 @@ public class RubiksSolverApplication {
 
   private static char[] D(char[] cube) {
     char[] copy = copyOf(cube);
-    // 60 61 62  63  64  65 66 67 68 69 70 71
-    //           75  76  77
-    //           87  88  89
-    //           99 100 101
-    //
-    // 69 70 71 60  61 62 63 64 65 66 67 68
-    //          99  87 75
-    //          100 88 76
-    //          101 89 77
 
     char outerEdgesTemp1 = copy[42];
     char outerEdgesTemp2 = copy[43];
@@ -216,15 +189,6 @@ public class RubiksSolverApplication {
 
   private static char[] D_PRIME(char[] cube) {
     char[] copy = copyOf(cube);
-    // 60 61 62 63 64  65 66 67 68 69 70 71
-    //          75 76  77
-    //          87 88  89
-    //          99 100 101
-    //
-    // 63 64 65 66 67 68  69 70 71 60 61 62
-    //          77 89 101
-    //          76 88 100
-    //          75 87 99
 
     char outerEdgesTemp1 = copy[33];
     char outerEdgesTemp2 = copy[34];
@@ -253,17 +217,6 @@ public class RubiksSolverApplication {
 
   private static char[] F(char[] cube) {
     char[] copy = copyOf(cube);
-    //    27 28 29
-    // 38 39 40 41 42
-    // 50 51 52 53 54
-    // 62 63 64 65 66
-    //    75 76 77
-    //
-    //    62 50 38
-    // 75 63 51 39 27
-    // 76 64 52 40 28
-    // 77 65 53 41 29
-    //    66 54 42
 
     char outerEdgesTemp1 = copy[6];
     char outerEdgesTemp2 = copy[7];
@@ -298,17 +251,6 @@ public class RubiksSolverApplication {
 
   private static char[] F_PRIME(char[] cube) {
     char[] copy = copyOf(cube);
-    //    27 28 29
-    // 38 39 40 41 42
-    // 50 51 52 53 54
-    // 62 63 64 65 66
-    //    75 76 77
-    //
-    //    42 54 66
-    // 29 41 53 65 77
-    // 28 40 52 64 76
-    // 27 39 51 63 75
-    //    38 50 62
 
     char outerEdgesTemp1 = copy[6];
     char outerEdgesTemp2 = copy[7];
@@ -342,25 +284,6 @@ public class RubiksSolverApplication {
 
   private static char[] B(char[] cube) {
     char[] copy = copyOf(cube);
-    //                       3      4       5
-    //
-    //
-    //  36                                                        44     45     46     47
-    //  48                                                        56     57     58     59
-    //  60                                                        68     69     70     71
-    //
-    //
-    //                       99     100     101
-    //
-    //                       44     56      68
-    //
-    //
-    //   5                                                       101     69     57     45
-    //   4                                                       100     70     58     46
-    //   3                                                        99     71     59     47
-    //
-    //
-    //                       36     48     60
 
     char outerEdgesTemp1 = copy[0];
     char outerEdgesTemp2 = copy[1];
@@ -395,25 +318,6 @@ public class RubiksSolverApplication {
 
   private static char[] B_PRIME(char[] cube) {
     char[] copy = copyOf(cube);
-    //                       3      4       5
-    //
-    //
-    //  36                                                        44     45     46     47
-    //  48                                                        56     57     58     59
-    //  60                                                        68     69     70     71
-    //
-    //
-    //                       99     100     101
-    //
-    //                       60      48     36
-    //
-    //
-    //  99                                                         3     47     59     71
-    //  100                                                        4     46     58     70
-    //  101                                                        5     45     57     69
-    //
-    //
-    //                       68      56     44
 
     char outerEdgesTemp1 = copy[0];
     char outerEdgesTemp2 = copy[1];
@@ -448,25 +352,7 @@ public class RubiksSolverApplication {
 
   private static char[] L(char[] cube) {
     char[] copy = copyOf(cube);
-    //                       3
-    //                       15
-    //                       27
-    //  36     37     38     39                                                        47
-    //  48     49     50     51                                                        59
-    //  60     61     62     63                                                        71
-    //                       75
-    //                       87
-    //                       99
-    //
-    //                       71
-    //                       59
-    //                       47
-    //  60     48     36     3                                                         99
-    //  61     49     37     15                                                        87
-    //  62     50     38     27                                                        75
-    //                       39
-    //                       51
-    //                       63
+
     char outerEdgesTemp1 = copy[0];
     char outerEdgesTemp2 = copy[3];
     char outerEdgesTemp3 = copy[6];
@@ -500,25 +386,7 @@ public class RubiksSolverApplication {
 
   private static char[] L_PRIME(char[] cube) {
     char[] copy = copyOf(cube);
-    //                       3
-    //                       15
-    //                       27
-    //  36     37     38     39                                                        47
-    //  48     49     50     51                                                        59
-    //  60     61     62     63                                                        71
-    //                       75
-    //                       87
-    //                       99
-    //
-    //                       39
-    //                       51
-    //                       63
-    //  38     50     62     75                                                        27
-    //  37     49     61     87                                                        15
-    //  36     48     60     99                                                        3
-    //                       71
-    //                       59
-    //                       47
+
     char outerEdgesTemp1 = copy[0];
     char outerEdgesTemp2 = copy[3];
     char outerEdgesTemp3 = copy[6];
@@ -552,25 +420,7 @@ public class RubiksSolverApplication {
 
   private static char[] R(char[] cube) {
     char[] copy = copyOf(cube);
-    //                                      5
-    //                                      17
-    //                                      29
-    //                                      41      42     43     44     45
-    //                                      53      54     55     56     57
-    //                                      65      66     67     68     69
-    //                                      77
-    //                                      89
-    //                                      101
-    //
-    //                                      41
-    //                                      53
-    //                                      65
-    //                                      77      66     54     42     29
-    //                                      89      67     55     43     17
-    //                                      101     68     56     44     5
-    //                                      69
-    //                                      57
-    //                                      45
+
     char outerEdgesTemp1 = copy[2];
     char outerEdgesTemp2 = copy[5];
     char outerEdgesTemp3 = copy[8];
@@ -604,25 +454,7 @@ public class RubiksSolverApplication {
 
   private static char[] R_PRIME(char[] cube) {
     char[] copy = copyOf(cube);
-    //                                      5
-    //                                      17
-    //                                      29
-    //                                      41      42     43     44     45
-    //                                      53      54     55     56     57
-    //                                      65      66     67     68     69
-    //                                      77
-    //                                      89
-    //                                      101
-    //
-    //                                      69
-    //                                      57
-    //                                      45
-    //                                      5       44     56     68     101
-    //                                      17      43     55     67     89
-    //                                      29      42     54     66     77
-    //                                      41
-    //                                      53
-    //                                      65
+
     char outerEdgesTemp1 = copy[2];
     char outerEdgesTemp2 = copy[5];
     char outerEdgesTemp3 = copy[8];
