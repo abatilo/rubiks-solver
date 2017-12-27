@@ -5,6 +5,19 @@ import java.util.List;
 public class RubiksSolverApplication {
   public static void main(String[] args) {
     printCube(cube);
+
+    // for (int i = 0; i < 1_000_000; ++i) {
+    // long start = System.currentTimeMillis();
+    // int repetitions = 0;
+    // while ((System.currentTimeMillis() - start) < 60_000) {
+    //   cube = U(cube);
+    //   if (cubeEquals(cube, correctness)) {
+    //     break;
+    //   }
+    //   ++repetitions;
+    // }
+    // System.out.println(repetitions);
+
     List<char[]> arr = new ArrayList<>();
     arr.add(cube);
     arr.stream()
@@ -40,20 +53,24 @@ public class RubiksSolverApplication {
       .map(RubiksSolverApplication::R)
       .map(RubiksSolverApplication::B_PRIME)
       .map(RubiksSolverApplication::B_PRIME)
-      .forEach(RubiksSolverApplication::printCube);
+      .forEach(c -> {
+        System.out.println(cubeEquals(correctness, c));
+        printCube(c);
+      });
   }
 
   private static char[] cube = new char[] {
-    ' ', ' ', ' ', 'r', 'r', 'r', ' ', ' ', ' ', ' ', ' ', ' ',
-    ' ', ' ', ' ', 'r', 'r', 'r', ' ', ' ', ' ', ' ', ' ', ' ',
-    ' ', ' ', ' ', 'r', 'r', 'r', ' ', ' ', ' ', ' ', ' ', ' ',
+    'r', 'r', 'r',
+    'r', 'r', 'r',
+    'r', 'r', 'r',
     'b', 'b', 'b', 'w', 'w', 'w', 'g', 'g', 'g', 'y', 'y', 'y',
     'b', 'b', 'b', 'w', 'w', 'w', 'g', 'g', 'g', 'y', 'y', 'y',
     'b', 'b', 'b', 'w', 'w', 'w', 'g', 'g', 'g', 'y', 'y', 'y',
-    ' ', ' ', ' ', 'o', 'o', 'o', ' ', ' ', ' ', ' ', ' ', ' ',
-    ' ', ' ', ' ', 'o', 'o', 'o', ' ', ' ', ' ', ' ', ' ', ' ',
-    ' ', ' ', ' ', 'o', 'o', 'o', ' ', ' ', ' ', ' ', ' ', ' ',
+    'o', 'o', 'o',
+    'o', 'o', 'o',
+    'o', 'o', 'o'
   };
+
   //                       3      4       5
   //                       15     16      17
   //                       27     28      29
@@ -63,6 +80,28 @@ public class RubiksSolverApplication {
   //                       75     76      77
   //                       87     88      89
   //                       99     100     101
+  //
+  //                       0      1       2
+  //                       3      4       5
+  //                       6      7       8
+  //  9      10     11     12     13      14      15     16     17     18     19     20
+  //  21     22     23     24     25      26      27     28     29     30     31     32
+  //  33     34     35     36     37      38      39     40     41     42     43     44
+  //                       45     46      47
+  //                       48     49      50
+  //                       51     52     53
+
+  private static char[] correctness = new char[] {
+ 'o', 'y', 'w',
+ 'g', 'r', 'o',
+ 'g', 'g', 'w',
+ 'b', 'o', 'o', 'y', 'w', 'r', 'b', 'b', 'o', 'g', 'o', 'w',
+ 'r', 'b', 'g', 'r', 'w', 'w', 'b', 'g', 'r', 'w', 'y', 'y',
+ 'y', 'g', 'o', 'y', 'b', 'r', 'g', 'o', 'r', 'y', 'b', 'b',
+ 'b', 'y', 'w',
+ 'y', 'o', 'w',
+ 'r', 'r', 'g'
+  };
 
   private static char[] U(char[] cube) {
     char[] copy = copyOf(cube);
@@ -76,27 +115,27 @@ public class RubiksSolverApplication {
     //          29 17  5
     // 39 40 41 42 43 44 45 46 47 36 37 38
 
-    char outerEdgesTemp1 = copy[36];
-    char outerEdgesTemp2 = copy[37];
-    char outerEdgesTemp3 = copy[38];
-    for (int i = 36; i < 45; ++i) {
+    char outerEdgesTemp1 = copy[9];
+    char outerEdgesTemp2 = copy[10];
+    char outerEdgesTemp3 = copy[11];
+    for (int i = 9; i < 18; ++i) {
       copy[i] = copy[i + 3];
     }
-    copy[45] = outerEdgesTemp1;
-    copy[46] = outerEdgesTemp2;
-    copy[47] = outerEdgesTemp3;
+    copy[18] = outerEdgesTemp1;
+    copy[19] = outerEdgesTemp2;
+    copy[20] = outerEdgesTemp3;
 
-    char innerCornerTemp = copy[3];
-    copy[3] = copy[27];
-    copy[27] = copy[29];
-    copy[29] = copy[5];
-    copy[5] = innerCornerTemp;
+    char innerCornerTemp = copy[0];
+    copy[0] = copy[6];
+    copy[6] = copy[8];
+    copy[8] = copy[2];
+    copy[2] = innerCornerTemp;
 
-    char innerEdgeTemp = copy[4];
-    copy[4] = copy[15];
-    copy[15] = copy[28];
-    copy[28] = copy[17];
-    copy[17] = innerEdgeTemp;
+    char innerEdgeTemp = copy[1];
+    copy[1] = copy[3];
+    copy[3] = copy[7];
+    copy[7] = copy[5];
+    copy[5] = innerEdgeTemp;
 
     return copy;
   }
@@ -113,27 +152,27 @@ public class RubiksSolverApplication {
     //           3 15 27
     // 45 46 47 36 37 38 39 40 41 42 43 44
 
-    char outerEdgesTemp1 = copy[45];
-    char outerEdgesTemp2 = copy[46];
-    char outerEdgesTemp3 = copy[47];
-    for (int i = 47; i >= 39; --i) {
+    char outerEdgesTemp1 = copy[18];
+    char outerEdgesTemp2 = copy[19];
+    char outerEdgesTemp3 = copy[20];
+    for (int i = 20; i >= 12; --i) {
       copy[i] = copy[i - 3];
     }
-    copy[36] = outerEdgesTemp1;
-    copy[37] = outerEdgesTemp2;
-    copy[38] = outerEdgesTemp3;
+    copy[9] = outerEdgesTemp1;
+    copy[10] = outerEdgesTemp2;
+    copy[11] = outerEdgesTemp3;
 
-    char innerCornerTemp = copy[3];
-    copy[3] = copy[5];
-    copy[5] = copy[29];
-    copy[29] = copy[27];
-    copy[27] = innerCornerTemp;
+    char innerCornerTemp = copy[0];
+    copy[0] = copy[2];
+    copy[2] = copy[8];
+    copy[8] = copy[6];
+    copy[6] = innerCornerTemp;
 
-    char innerEdgeTemp = copy[4];
-    copy[4] = copy[17];
-    copy[17] = copy[28];
-    copy[28] = copy[15];
-    copy[15] = innerEdgeTemp;
+    char innerEdgeTemp = copy[1];
+    copy[1] = copy[5];
+    copy[5] = copy[7];
+    copy[7] = copy[3];
+    copy[3] = innerEdgeTemp;
 
     return copy;
   }
@@ -150,27 +189,27 @@ public class RubiksSolverApplication {
     //          100 88 76
     //          101 89 77
 
-    char outerEdgesTemp1 = copy[69];
-    char outerEdgesTemp2 = copy[70];
-    char outerEdgesTemp3 = copy[71];
-    for (int i = 71; i >= 60; --i) {
+    char outerEdgesTemp1 = copy[42];
+    char outerEdgesTemp2 = copy[43];
+    char outerEdgesTemp3 = copy[44];
+    for (int i = 44; i >= 33; --i) {
       copy[i] = copy[i - 3];
     }
-    copy[60] = outerEdgesTemp1;
-    copy[61] = outerEdgesTemp2;
-    copy[62] = outerEdgesTemp3;
+    copy[33] = outerEdgesTemp1;
+    copy[34] = outerEdgesTemp2;
+    copy[35] = outerEdgesTemp3;
 
-    char innerCornerTemp = copy[75];
-    copy[75] = copy[99];
-    copy[99] = copy[101];
-    copy[101] = copy[77];
-    copy[77] = innerCornerTemp;
+    char innerCornerTemp = copy[45];
+    copy[45] = copy[51];
+    copy[51] = copy[53];
+    copy[53] = copy[47];
+    copy[47] = innerCornerTemp;
 
-    char innerEdgeTemp = copy[76];
-    copy[76] = copy[87];
-    copy[87] = copy[100];
-    copy[100] = copy[89];
-    copy[89] = innerEdgeTemp;
+    char innerEdgeTemp = copy[46];
+    copy[46] = copy[48];
+    copy[48] = copy[52];
+    copy[52] = copy[50];
+    copy[50] = innerEdgeTemp;
 
     return copy;
   }
@@ -187,27 +226,27 @@ public class RubiksSolverApplication {
     //          76 88 100
     //          75 87 99
 
-    char outerEdgesTemp1 = copy[60];
-    char outerEdgesTemp2 = copy[61];
-    char outerEdgesTemp3 = copy[62];
-    for (int i = 60; i < 69; ++i) {
+    char outerEdgesTemp1 = copy[33];
+    char outerEdgesTemp2 = copy[34];
+    char outerEdgesTemp3 = copy[35];
+    for (int i = 33; i < 42; ++i) {
       copy[i] = copy[i + 3];
     }
-    copy[69] = outerEdgesTemp1;
-    copy[70] = outerEdgesTemp2;
-    copy[71] = outerEdgesTemp3;
+    copy[42] = outerEdgesTemp1;
+    copy[43] = outerEdgesTemp2;
+    copy[44] = outerEdgesTemp3;
 
-    char innerCornerTemp = copy[75];
-    copy[75] = copy[77];
-    copy[77] = copy[101];
-    copy[101] = copy[99];
-    copy[99] = innerCornerTemp;
+    char innerCornerTemp = copy[45];
+    copy[45] = copy[47];
+    copy[47] = copy[53];
+    copy[53] = copy[51];
+    copy[51] = innerCornerTemp;
 
-    char innerEdgeTemp = copy[76];
-    copy[76] = copy[89];
-    copy[89] = copy[100];
-    copy[100] = copy[87];
-    copy[87] = innerEdgeTemp;
+    char innerEdgeTemp = copy[46];
+    copy[46] = copy[50];
+    copy[50] = copy[52];
+    copy[52] = copy[48];
+    copy[48] = innerEdgeTemp;
 
     return copy;
   }
@@ -226,33 +265,33 @@ public class RubiksSolverApplication {
     // 77 65 53 41 29
     //    66 54 42
 
-    char outerEdgesTemp1 = copy[27];
-    char outerEdgesTemp2 = copy[28];
-    char outerEdgesTemp3 = copy[29];
-    copy[29] = copy[38];
-    copy[28] = copy[50];
-    copy[27] = copy[62];
-    copy[38] = copy[75];
-    copy[50] = copy[76];
-    copy[62] = copy[77];
-    copy[75] = copy[66];
-    copy[76] = copy[54];
-    copy[77] = copy[42];
-    copy[42] = outerEdgesTemp1;
-    copy[54] = outerEdgesTemp2;
-    copy[66] = outerEdgesTemp3;
+    char outerEdgesTemp1 = copy[6];
+    char outerEdgesTemp2 = copy[7];
+    char outerEdgesTemp3 = copy[8];
+    copy[8] = copy[11];
+    copy[7] = copy[23];
+    copy[6] = copy[35];
+    copy[11] = copy[45];
+    copy[23] = copy[46];
+    copy[35] = copy[47];
+    copy[45] = copy[39];
+    copy[46] = copy[27];
+    copy[47] = copy[15];
+    copy[15] = outerEdgesTemp1;
+    copy[27] = outerEdgesTemp2;
+    copy[39] = outerEdgesTemp3;
 
-    char innerCornerTemp = copy[41];
-    copy[41] = copy[39];
-    copy[39] = copy[63];
-    copy[63] = copy[65];
-    copy[65] = innerCornerTemp;
+    char innerCornerTemp = copy[14];
+    copy[14] = copy[12];
+    copy[12] = copy[36];
+    copy[36] = copy[38];
+    copy[38] = innerCornerTemp;
 
-    char innerEdgeTemp = copy[40];
-    copy[40] = copy[51];
-    copy[51] = copy[64];
-    copy[64] = copy[53];
-    copy[53] = innerEdgeTemp;
+    char innerEdgeTemp = copy[13];
+    copy[13] = copy[24];
+    copy[24] = copy[37];
+    copy[37] = copy[26];
+    copy[26] = innerEdgeTemp;
 
     return copy;
   }
@@ -271,33 +310,33 @@ public class RubiksSolverApplication {
     // 27 39 51 63 75
     //    38 50 62
 
-    char outerEdgesTemp1 = copy[27];
-    char outerEdgesTemp2 = copy[28];
-    char outerEdgesTemp3 = copy[29];
-    copy[27] = copy[42];
-    copy[28] = copy[54];
-    copy[29] = copy[66];
-    copy[42] = copy[77];
-    copy[54] = copy[76];
-    copy[66] = copy[75];
-    copy[75] = copy[38];
-    copy[76] = copy[50];
-    copy[77] = copy[62];
-    copy[38] = outerEdgesTemp3;
-    copy[50] = outerEdgesTemp2;
-    copy[62] = outerEdgesTemp1;
+    char outerEdgesTemp1 = copy[6];
+    char outerEdgesTemp2 = copy[7];
+    char outerEdgesTemp3 = copy[8];
+    copy[6] = copy[15];
+    copy[7] = copy[27];
+    copy[8] = copy[39];
+    copy[15] = copy[47];
+    copy[27] = copy[46];
+    copy[39] = copy[45];
+    copy[45] = copy[11];
+    copy[46] = copy[23];
+    copy[47] = copy[35];
+    copy[11] = outerEdgesTemp3;
+    copy[23] = outerEdgesTemp2;
+    copy[35] = outerEdgesTemp1;
 
-    char innerCornerTemp = copy[41];
-    copy[41] = copy[65];
-    copy[65] = copy[63];
-    copy[63] = copy[39];
-    copy[39] = innerCornerTemp;
+    char innerCornerTemp = copy[14];
+    copy[14] = copy[38];
+    copy[38] = copy[36];
+    copy[36] = copy[12];
+    copy[12] = innerCornerTemp;
 
-    char innerEdgeTemp = copy[40];
-    copy[40] = copy[53];
-    copy[53] = copy[64];
-    copy[64] = copy[51];
-    copy[51] = innerEdgeTemp;
+    char innerEdgeTemp = copy[13];
+    copy[13] = copy[26];
+    copy[26] = copy[37];
+    copy[37] = copy[24];
+    copy[24] = innerEdgeTemp;
     return copy;
   }
 
@@ -323,33 +362,33 @@ public class RubiksSolverApplication {
     //
     //                       36     48     60
 
-    char outerEdgesTemp1 = copy[3];
-    char outerEdgesTemp2 = copy[4];
-    char outerEdgesTemp3 = copy[5];
-    copy[3] = copy[44];
-    copy[44] = copy[101];
-    copy[101] = copy[60];
-    copy[60] = outerEdgesTemp1;
-    copy[4] = copy[56];
-    copy[56] = copy[100];
-    copy[100] = copy[48];
-    copy[48] = outerEdgesTemp2;
-    copy[5] = copy[68];
-    copy[68] = copy[99];
-    copy[99] = copy[36];
-    copy[36] = outerEdgesTemp3;
+    char outerEdgesTemp1 = copy[0];
+    char outerEdgesTemp2 = copy[1];
+    char outerEdgesTemp3 = copy[2];
+    copy[0] = copy[17];
+    copy[17] = copy[53];
+    copy[53] = copy[33];
+    copy[33] = outerEdgesTemp1;
+    copy[1] = copy[29];
+    copy[29] = copy[52];
+    copy[52] = copy[21];
+    copy[21] = outerEdgesTemp2;
+    copy[2] = copy[41];
+    copy[41] = copy[51];
+    copy[51] = copy[9];
+    copy[9] = outerEdgesTemp3;
 
-    char innerCornerTemp = copy[45];
-    copy[45] = copy[69];
-    copy[69] = copy[71];
-    copy[71] = copy[47];
-    copy[47] = innerCornerTemp;
+    char innerCornerTemp = copy[18];
+    copy[18] = copy[42];
+    copy[42] = copy[44];
+    copy[44] = copy[20];
+    copy[20] = innerCornerTemp;
 
-    char innerEdgeTemp = copy[46];
-    copy[46] = copy[57];
-    copy[57] = copy[70];
-    copy[70] = copy[59];
-    copy[59] = innerEdgeTemp;
+    char innerEdgeTemp = copy[19];
+    copy[19] = copy[30];
+    copy[30] = copy[43];
+    copy[43] = copy[32];
+    copy[32] = innerEdgeTemp;
 
     return copy;
   }
@@ -376,33 +415,33 @@ public class RubiksSolverApplication {
     //
     //                       68      56     44
 
-    char outerEdgesTemp1 = copy[3];
-    char outerEdgesTemp2 = copy[4];
-    char outerEdgesTemp3 = copy[5];
-    copy[3] = copy[60];
-    copy[60] = copy[101];
-    copy[101] = copy[44];
-    copy[44] = outerEdgesTemp1;
-    copy[4] = copy[48];
-    copy[48] = copy[100];
-    copy[100] = copy[56];
-    copy[56] = outerEdgesTemp2;
-    copy[5] = copy[36];
-    copy[36] = copy[99];
-    copy[99] = copy[68];
-    copy[68] = outerEdgesTemp3;
+    char outerEdgesTemp1 = copy[0];
+    char outerEdgesTemp2 = copy[1];
+    char outerEdgesTemp3 = copy[2];
+    copy[0] = copy[33];
+    copy[33] = copy[53];
+    copy[53] = copy[17];
+    copy[17] = outerEdgesTemp1;
+    copy[1] = copy[21];
+    copy[21] = copy[52];
+    copy[52] = copy[29];
+    copy[29] = outerEdgesTemp2;
+    copy[2] = copy[9];
+    copy[9] = copy[51];
+    copy[51] = copy[41];
+    copy[41] = outerEdgesTemp3;
 
-    char innerCornerTemp = copy[45];
-    copy[45] = copy[47];
-    copy[47] = copy[71];
-    copy[71] = copy[69];
-    copy[69] = innerCornerTemp;
+    char innerCornerTemp = copy[18];
+    copy[18] = copy[20];
+    copy[20] = copy[44];
+    copy[44] = copy[42];
+    copy[42] = innerCornerTemp;
 
-    char innerEdgeTemp = copy[46];
-    copy[46] = copy[59];
-    copy[59] = copy[70];
-    copy[70] = copy[57];
-    copy[57] = innerEdgeTemp;
+    char innerEdgeTemp = copy[19];
+    copy[19] = copy[32];
+    copy[32] = copy[43];
+    copy[43] = copy[30];
+    copy[30] = innerEdgeTemp;
 
     return copy;
   }
@@ -428,33 +467,33 @@ public class RubiksSolverApplication {
     //                       39
     //                       51
     //                       63
-    char outerEdgesTemp1 = copy[3];
-    char outerEdgesTemp2 = copy[15];
-    char outerEdgesTemp3 = copy[27];
-    copy[3] = copy[71];
-    copy[71] = copy[75];
-    copy[75] = copy[39];
-    copy[39] = outerEdgesTemp1;
-    copy[15] = copy[59];
-    copy[59] = copy[87];
-    copy[87] = copy[51];
-    copy[51] = outerEdgesTemp2;
-    copy[27] = copy[47];
-    copy[47] = copy[99];
-    copy[99] = copy[63];
-    copy[63] = outerEdgesTemp3;
+    char outerEdgesTemp1 = copy[0];
+    char outerEdgesTemp2 = copy[3];
+    char outerEdgesTemp3 = copy[6];
+    copy[0] = copy[44];
+    copy[44] = copy[45];
+    copy[45] = copy[12];
+    copy[12] = outerEdgesTemp1;
+    copy[3] = copy[32];
+    copy[32] = copy[48];
+    copy[48] = copy[24];
+    copy[24] = outerEdgesTemp2;
+    copy[6] = copy[20];
+    copy[20] = copy[51];
+    copy[51] = copy[36];
+    copy[36] = outerEdgesTemp3;
 
-    char innerCornerTemp = copy[36];
-    copy[36] = copy[60];
-    copy[60] = copy[62];
-    copy[62] = copy[38];
-    copy[38] = innerCornerTemp;
+    char innerCornerTemp = copy[9];
+    copy[9] = copy[33];
+    copy[33] = copy[35];
+    copy[35] = copy[11];
+    copy[11] = innerCornerTemp;
 
-    char innerEdgeTemp = copy[37];
-    copy[37] = copy[48];
-    copy[48] = copy[61];
-    copy[61] = copy[50];
-    copy[50] = innerEdgeTemp;
+    char innerEdgeTemp = copy[10];
+    copy[10] = copy[21];
+    copy[21] = copy[34];
+    copy[34] = copy[23];
+    copy[23] = innerEdgeTemp;
 
     return copy;
   }
@@ -480,140 +519,140 @@ public class RubiksSolverApplication {
     //                       71
     //                       59
     //                       47
-    char outerEdgesTemp1 = copy[3];
-    char outerEdgesTemp2 = copy[15];
-    char outerEdgesTemp3 = copy[27];
-    copy[3] = copy[39];
-    copy[39] = copy[75];
-    copy[75] = copy[71];
-    copy[71] = outerEdgesTemp1;
-    copy[15] = copy[51];
-    copy[51] = copy[87];
-    copy[87] = copy[59];
-    copy[59] = outerEdgesTemp2;
-    copy[27] = copy[63];
-    copy[63] = copy[99];
-    copy[99] = copy[47];
-    copy[47] = outerEdgesTemp3;
+    char outerEdgesTemp1 = copy[0];
+    char outerEdgesTemp2 = copy[3];
+    char outerEdgesTemp3 = copy[6];
+    copy[0] = copy[12];
+    copy[12] = copy[45];
+    copy[45] = copy[44];
+    copy[44] = outerEdgesTemp1;
+    copy[3] = copy[24];
+    copy[24] = copy[48];
+    copy[48] = copy[32];
+    copy[32] = outerEdgesTemp2;
+    copy[6] = copy[36];
+    copy[36] = copy[51];
+    copy[51] = copy[20];
+    copy[20] = outerEdgesTemp3;
 
-    char innerCornerTemp = copy[36];
-    copy[36] = copy[38];
-    copy[38] = copy[62];
-    copy[62] = copy[60];
-    copy[60] = innerCornerTemp;
+    char innerCornerTemp = copy[9];
+    copy[9] = copy[11];
+    copy[11] = copy[35];
+    copy[35] = copy[33];
+    copy[33] = innerCornerTemp;
 
-    char innerEdgeTemp = copy[37];
-    copy[37] = copy[50];
-    copy[50] = copy[61];
-    copy[61] = copy[48];
-    copy[48] = innerEdgeTemp;
+    char innerEdgeTemp = copy[10];
+    copy[10] = copy[23];
+    copy[23] = copy[34];
+    copy[34] = copy[21];
+    copy[21] = innerEdgeTemp;
 
     return copy;
   }
 
-    private static char[] R(char[] cube) {
-      char[] copy = copyOf(cube);
-      //                                      5
-      //                                      17
-      //                                      29
-      //                                      41      42     43     44     45
-      //                                      53      54     55     56     57
-      //                                      65      66     67     68     69
-      //                                      77
-      //                                      89
-      //                                      101
-      //
-      //                                      41
-      //                                      53
-      //                                      65
-      //                                      77      66     54     42     29
-      //                                      89      67     55     43     17
-      //                                      101     68     56     44     5
-      //                                      69
-      //                                      57
-      //                                      45
-      char outerEdgesTemp1 = copy[5];
-      char outerEdgesTemp2 = copy[17];
-      char outerEdgesTemp3 = copy[29];
-      copy[5] = copy[41];
-      copy[41] = copy[77];
-      copy[77] = copy[69];
-      copy[69] = outerEdgesTemp1;
-      copy[17] = copy[53];
-      copy[53] = copy[89];
-      copy[89] = copy[57];
-      copy[57] = outerEdgesTemp2;
-      copy[29] = copy[65];
-      copy[65] = copy[101];
-      copy[101] = copy[45];
-      copy[45] = outerEdgesTemp3;
+  private static char[] R(char[] cube) {
+    char[] copy = copyOf(cube);
+    //                                      5
+    //                                      17
+    //                                      29
+    //                                      41      42     43     44     45
+    //                                      53      54     55     56     57
+    //                                      65      66     67     68     69
+    //                                      77
+    //                                      89
+    //                                      101
+    //
+    //                                      41
+    //                                      53
+    //                                      65
+    //                                      77      66     54     42     29
+    //                                      89      67     55     43     17
+    //                                      101     68     56     44     5
+    //                                      69
+    //                                      57
+    //                                      45
+    char outerEdgesTemp1 = copy[2];
+    char outerEdgesTemp2 = copy[5];
+    char outerEdgesTemp3 = copy[8];
+    copy[2] = copy[14];
+    copy[14] = copy[47];
+    copy[47] = copy[42];
+    copy[42] = outerEdgesTemp1;
+    copy[5] = copy[26];
+    copy[26] = copy[50];
+    copy[50] = copy[30];
+    copy[30] = outerEdgesTemp2;
+    copy[8] = copy[38];
+    copy[38] = copy[53];
+    copy[53] = copy[18];
+    copy[18] = outerEdgesTemp3;
 
-      char innerCornerTemp = copy[42];
-      copy[42] = copy[66];
-      copy[66] = copy[68];
-      copy[68] = copy[44];
-      copy[44] = innerCornerTemp;
+    char innerCornerTemp = copy[15];
+    copy[15] = copy[39];
+    copy[39] = copy[41];
+    copy[41] = copy[17];
+    copy[17] = innerCornerTemp;
 
-      char innerEdgeTemp = copy[43];
-      copy[43] = copy[54];
-      copy[54] = copy[67];
-      copy[67] = copy[56];
-      copy[56] = innerEdgeTemp;
+    char innerEdgeTemp = copy[16];
+    copy[16] = copy[27];
+    copy[27] = copy[40];
+    copy[40] = copy[29];
+    copy[29] = innerEdgeTemp;
 
-      return copy;
-    }
+    return copy;
+  }
 
-    private static char[] R_PRIME(char[] cube) {
-      char[] copy = copyOf(cube);
-      //                                      5
-      //                                      17
-      //                                      29
-      //                                      41      42     43     44     45
-      //                                      53      54     55     56     57
-      //                                      65      66     67     68     69
-      //                                      77
-      //                                      89
-      //                                      101
-      //
-      //                                      69
-      //                                      57
-      //                                      45
-      //                                      5       44     56     68     101
-      //                                      17      43     55     67     89
-      //                                      29      42     54     66     77
-      //                                      41
-      //                                      53
-      //                                      65
-      char outerEdgesTemp1 = copy[5];
-      char outerEdgesTemp2 = copy[17];
-      char outerEdgesTemp3 = copy[29];
-      copy[5] = copy[69];
-      copy[69] = copy[77];
-      copy[77] = copy[41];
-      copy[41] = outerEdgesTemp1;
-      copy[17] = copy[57];
-      copy[57] = copy[89];
-      copy[89] = copy[53];
-      copy[53] = outerEdgesTemp2;
-      copy[29] = copy[45];
-      copy[45] = copy[101];
-      copy[101] = copy[65];
-      copy[65] = outerEdgesTemp3;
+  private static char[] R_PRIME(char[] cube) {
+    char[] copy = copyOf(cube);
+    //                                      5
+    //                                      17
+    //                                      29
+    //                                      41      42     43     44     45
+    //                                      53      54     55     56     57
+    //                                      65      66     67     68     69
+    //                                      77
+    //                                      89
+    //                                      101
+    //
+    //                                      69
+    //                                      57
+    //                                      45
+    //                                      5       44     56     68     101
+    //                                      17      43     55     67     89
+    //                                      29      42     54     66     77
+    //                                      41
+    //                                      53
+    //                                      65
+    char outerEdgesTemp1 = copy[2];
+    char outerEdgesTemp2 = copy[5];
+    char outerEdgesTemp3 = copy[8];
+    copy[2] = copy[42];
+    copy[42] = copy[47];
+    copy[47] = copy[14];
+    copy[14] = outerEdgesTemp1;
+    copy[5] = copy[30];
+    copy[30] = copy[50];
+    copy[50] = copy[26];
+    copy[26] = outerEdgesTemp2;
+    copy[8] = copy[18];
+    copy[18] = copy[53];
+    copy[53] = copy[38];
+    copy[38] = outerEdgesTemp3;
 
-      char innerCornerTemp = copy[42];
-      copy[42] = copy[44];
-      copy[44] = copy[68];
-      copy[68] = copy[66];
-      copy[66] = innerCornerTemp;
+    char innerCornerTemp = copy[15];
+    copy[15] = copy[17];
+    copy[17] = copy[41];
+    copy[41] = copy[39];
+    copy[39] = innerCornerTemp;
 
-      char innerEdgeTemp = copy[43];
-      copy[43] = copy[56];
-      copy[56] = copy[67];
-      copy[67] = copy[54];
-      copy[54] = innerEdgeTemp;
+    char innerEdgeTemp = copy[16];
+    copy[16] = copy[29];
+    copy[29] = copy[40];
+    copy[40] = copy[27];
+    copy[27] = innerEdgeTemp;
 
-      return copy;
-    }
+    return copy;
+  }
 
   private static char[] copyOf(char[] cube) {
     char[] copy = new char[cube.length];
@@ -622,25 +661,52 @@ public class RubiksSolverApplication {
   }
 
   private static final char[] SOLUTION = new char[] {
-    ' ', ' ', ' ', 'r', 'r', 'r', ' ', ' ', ' ', ' ', ' ', ' ',
-    ' ', ' ', ' ', 'r', 'r', 'r', ' ', ' ', ' ', ' ', ' ', ' ',
-    ' ', ' ', ' ', 'r', 'r', 'r', ' ', ' ', ' ', ' ', ' ', ' ',
+    'r', 'r', 'r',
+    'r', 'r', 'r',
+    'r', 'r', 'r',
     'b', 'b', 'b', 'w', 'w', 'w', 'g', 'g', 'g', 'y', 'y', 'y',
     'b', 'b', 'b', 'w', 'w', 'X', 'g', 'g', 'g', 'y', 'y', 'y',
     'b', 'b', 'b', 'w', 'w', 'w', 'g', 'g', 'g', 'y', 'y', 'y',
-    ' ', ' ', ' ', 'o', 'o', 'o', ' ', ' ', ' ', ' ', ' ', ' ',
-    ' ', ' ', ' ', 'o', 'o', 'o', ' ', ' ', ' ', ' ', ' ', ' ',
-    ' ', ' ', ' ', 'o', 'o', 'o', ' ', ' ', ' ', ' ', ' ', ' ',
+    'o', 'o', 'o',
+    'o', 'o', 'o',
+    'o', 'o', 'o'
   };
 
   private static void printCube(char[] cube) {
-    for (int j = 0; j < 9; ++j) {
-      for (int i = 0; i < 12; ++i) {
-        System.out.print(String.format("%1$3s", cube[12 * j + i]));
-        System.out.print(" ");
+    for (int i = 0; i < 3; ++i) {
+      System.out.print("   ");
+      for (int j = 3 * i; j < 3 * i + 3; ++j) {
+        System.out.print(cube[j]);
       }
       System.out.println();
     }
+    for (int i = 9; i < 21; ++i) {
+      System.out.print(cube[i]);
+    }
+    System.out.println();
+    for (int i = 21; i < 33; ++i) {
+      System.out.print(cube[i]);
+    }
+    System.out.println();
+    for (int i = 33; i < 45; ++i) {
+      System.out.print(cube[i]);
+    }
+    System.out.println();
+    System.out.print("   ");
+    for (int i = 45; i < 48; ++i) {
+      System.out.print(cube[i]);
+    }
+    System.out.println();
+    System.out.print("   ");
+    for (int i = 48; i < 51; ++i) {
+      System.out.print(cube[i]);
+    }
+    System.out.println();
+    System.out.print("   ");
+    for (int i = 51; i < 54; ++i) {
+      System.out.print(cube[i]);
+    }
+    System.out.println();
     System.out.println();
   }
 
