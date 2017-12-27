@@ -1,23 +1,13 @@
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Queue;
+import java.util.Set;
 
 public class RubiksSolverApplication {
   public static void main(String[] args) {
-    printCube(cube);
-
-    // for (int i = 0; i < 1_000_000; ++i) {
-    // long start = System.currentTimeMillis();
-    // int repetitions = 0;
-    // while ((System.currentTimeMillis() - start) < 60_000) {
-    //   cube = U(cube);
-    //   if (cubeEquals(cube, correctness)) {
-    //     break;
-    //   }
-    //   ++repetitions;
-    // }
-    // System.out.println(repetitions);
-
     List<char[]> arr = new ArrayList<>();
     arr.add(cube);
     arr.stream()
@@ -26,37 +16,71 @@ public class RubiksSolverApplication {
       .map(RubiksSolverApplication::L)
       .map(RubiksSolverApplication::R)
       .map(RubiksSolverApplication::U_PRIME)
-      .map(RubiksSolverApplication::B)
-      .map(RubiksSolverApplication::B)
-      .map(RubiksSolverApplication::D)
-      .map(RubiksSolverApplication::D)
-      .map(RubiksSolverApplication::B)
-      .map(RubiksSolverApplication::B)
-      .map(RubiksSolverApplication::R)
-      .map(RubiksSolverApplication::L)
-      .map(RubiksSolverApplication::L)
-      .map(RubiksSolverApplication::B)
-      .map(RubiksSolverApplication::D)
-      .map(RubiksSolverApplication::B)
-      .map(RubiksSolverApplication::L_PRIME)
-      .map(RubiksSolverApplication::D_PRIME)
-      .map(RubiksSolverApplication::R_PRIME)
-      .map(RubiksSolverApplication::F_PRIME)
-      .map(RubiksSolverApplication::U)
-      .map(RubiksSolverApplication::F)
-      .map(RubiksSolverApplication::F)
-      .map(RubiksSolverApplication::U_PRIME)
-      .map(RubiksSolverApplication::L_PRIME)
-      .map(RubiksSolverApplication::F)
-      .map(RubiksSolverApplication::B_PRIME)
-      .map(RubiksSolverApplication::U_PRIME)
-      .map(RubiksSolverApplication::R)
-      .map(RubiksSolverApplication::B_PRIME)
-      .map(RubiksSolverApplication::B_PRIME)
+      // .map(RubiksSolverApplication::B)
+      // .map(RubiksSolverApplication::B)
+      // .map(RubiksSolverApplication::D)
+      // .map(RubiksSolverApplication::D)
+      // .map(RubiksSolverApplication::B)
+      // .map(RubiksSolverApplication::B)
+      // .map(RubiksSolverApplication::R)
+      // .map(RubiksSolverApplication::L)
+      // .map(RubiksSolverApplication::L)
+      // .map(RubiksSolverApplication::B)
+      // .map(RubiksSolverApplication::D)
+      // .map(RubiksSolverApplication::B)
+      // .map(RubiksSolverApplication::L_PRIME)
+      // .map(RubiksSolverApplication::D_PRIME)
+      // .map(RubiksSolverApplication::R_PRIME)
+      // .map(RubiksSolverApplication::F_PRIME)
+      // .map(RubiksSolverApplication::U)
+      // .map(RubiksSolverApplication::F)
+      // .map(RubiksSolverApplication::F)
+      // .map(RubiksSolverApplication::U_PRIME)
+      // .map(RubiksSolverApplication::L_PRIME)
+      // .map(RubiksSolverApplication::F)
+      // .map(RubiksSolverApplication::B_PRIME)
+      // .map(RubiksSolverApplication::U_PRIME)
+      // .map(RubiksSolverApplication::R)
+      // .map(RubiksSolverApplication::B_PRIME)
+      // .map(RubiksSolverApplication::B_PRIME)
       .forEach(c -> {
-        System.out.println(cubeEquals(correctness, c));
-        printCube(c);
+
+        ArrayDeque<char[]> searchGraph = new ArrayDeque<>();
+        searchGraph.add(c);
+
+        Set<List<Character>> seenBefore = new HashSet<>();
+
+        int iterations = 0;
+        while (!searchGraph.isEmpty()) {
+          System.out.print(String.format("\rIterations: %d; Queue size: %d", ++iterations, searchGraph.size()));
+
+          char[] nextStep = searchGraph.remove();
+
+          if (seenBefore.contains(toList(nextStep))) {
+            System.out.println("\nDuplicate found");
+            continue;
+          }
+          seenBefore.add(toList(nextStep));
+
+          if (cubeEquals(SOLUTION, nextStep)) {
+            printCube(nextStep);
+            break;
+          }
+          searchGraph.add(U(nextStep));
+          searchGraph.add(D(nextStep));
+          searchGraph.add(F(nextStep));
+          searchGraph.add(B(nextStep));
+          searchGraph.add(L(nextStep));
+          searchGraph.add(R(nextStep));
+          searchGraph.add(U_PRIME(nextStep));
+          searchGraph.add(D_PRIME(nextStep));
+          searchGraph.add(F_PRIME(nextStep));
+          searchGraph.add(B_PRIME(nextStep));
+          searchGraph.add(L_PRIME(nextStep));
+          searchGraph.add(R_PRIME(nextStep));
+        }
       });
+
   }
 
   private static char[] cube = new char[] {
@@ -492,12 +516,20 @@ public class RubiksSolverApplication {
     return copy;
   }
 
+  private static List<Character> toList(char[] arr) {
+    List<Character> l = new ArrayList<>(arr.length);
+    for (Character c : arr) {
+      l.add(c);
+    }
+    return l;
+  }
+
   private static final char[] SOLUTION = new char[] {
     'r', 'r', 'r',
     'r', 'r', 'r',
     'r', 'r', 'r',
     'b', 'b', 'b', 'w', 'w', 'w', 'g', 'g', 'g', 'y', 'y', 'y',
-    'b', 'b', 'b', 'w', 'w', 'X', 'g', 'g', 'g', 'y', 'y', 'y',
+    'b', 'b', 'b', 'w', 'w', 'w', 'g', 'g', 'g', 'y', 'y', 'y',
     'b', 'b', 'b', 'w', 'w', 'w', 'g', 'g', 'g', 'y', 'y', 'y',
     'o', 'o', 'o',
     'o', 'o', 'o',
