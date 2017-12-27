@@ -129,16 +129,6 @@ public class RubiksSolverApplication {
     'o', 'o', 'o'
   };
 
-  //                       3      4       5
-  //                       15     16      17
-  //                       27     28      29
-  //  36     37     38     39     40      41      42     43     44     45     46     47
-  //  48     49     50     51     52      53      54     55     56     57     58     59
-  //  60     61     62     63     64      65      66     67     68     69     70     71
-  //                       75     76      77
-  //                       87     88      89
-  //                       99     100     101
-  //
   //                       0      1       2
   //                       3      4       5
   //                       6      7       8
@@ -610,5 +600,31 @@ public class RubiksSolverApplication {
 
   private static boolean cubeEquals(char[] cube1, char[] cube2) {
     return Arrays.equals(cube1, cube2);
+  }
+
+  //                       0      1       2
+  //                       3      4       5
+  //                       6      7       8
+  //  9      10     11     12     13      14      15     16     17     18     19     20
+  //  21     22     23     24     25      26      27     28     29     30     31     32
+  //  33     34     35     36     37      38      39     40     41     42     43     44
+  //                       45     46      47
+  //                       48     49      50
+  //                       51     52     53
+
+  private static final int[] redFace = new int[] { 0, 1, 2, 3, 4, 5, 6, 7, 8 };
+  private static final int[] blueFace = new int[] { 9, 10, 11, 21, 22, 23 };
+  private static final int[] whiteFace = new int[] { 12, 13, 14, 24, 25, 26, 36, 37, 38 };
+  private static final int[] greenFace = new int[] { };
+  private static final int[] yellowFace = new int[] {};
+  private static final int[] orangeFace = new int[] {};
+  private static int solvedness(char[] cube) {
+    int score = 0;
+    for (int y : yellowFace) {
+      if (cube[y] == 'y') {
+        ++score;
+      }
+    }
+    return 0;
   }
 }
