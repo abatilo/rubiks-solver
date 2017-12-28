@@ -1,11 +1,14 @@
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Scanner;
 import java.util.Set;
-import java.util.stream.Collectors;
+import java.util.concurrent.ThreadLocalRandom;
+import java.util.function.Function;
 
 public class RubiksSolverApplication {
   private static final ArrayDeque<CubeState> searchGraph = new ArrayDeque<>();
@@ -14,74 +17,58 @@ public class RubiksSolverApplication {
   public static void main(String[] args) throws InterruptedException {
     List<char[]> arr = new ArrayList<>();
     arr.add(cube);
-    char[] shuffled = arr.stream()
-      .map(RubiksSolverApplication::D)
-      .map(RubiksSolverApplication::D)
-      .map(RubiksSolverApplication::L)
-      .map(RubiksSolverApplication::R)
-      .map(RubiksSolverApplication::U_PRIME)
-      .map(RubiksSolverApplication::B)
-      // .map(RubiksSolverApplication::B)
-        // .map(RubiksSolverApplication::D)
-        // .map(RubiksSolverApplication::D)
-        // .map(RubiksSolverApplication::B)
-        // .map(RubiksSolverApplication::B)
-        // .map(RubiksSolverApplication::R)
-        // .map(RubiksSolverApplication::L)
-        // .map(RubiksSolverApplication::L)
-        // .map(RubiksSolverApplication::B)
-        // .map(RubiksSolverApplication::D)
-        // .map(RubiksSolverApplication::B)
-        // .map(RubiksSolverApplication::L_PRIME)
-        // .map(RubiksSolverApplication::D_PRIME)
-        // .map(RubiksSolverApplication::R_PRIME)
-        // .map(RubiksSolverApplication::F_PRIME)
-        // .map(RubiksSolverApplication::U)
-        // .map(RubiksSolverApplication::F)
-        // .map(RubiksSolverApplication::F)
-        // .map(RubiksSolverApplication::U_PRIME)
-        // .map(RubiksSolverApplication::L_PRIME)
-        // .map(RubiksSolverApplication::F)
-        // .map(RubiksSolverApplication::B_PRIME)
-        // .map(RubiksSolverApplication::U_PRIME)
-        // .map(RubiksSolverApplication::R)
-        // .map(RubiksSolverApplication::B_PRIME)
-        // .map(RubiksSolverApplication::B_PRIME)
-      .collect(Collectors.toList()).get(0);
+    char[] shuffled = shuffle(SOLUTION, 16);
 
     printCube(shuffled);
     searchGraph.add(new CubeState(shuffled, 0, ""));
 
-    int iterations = 0;
-    while (!searchGraph.isEmpty()) {
-      ++iterations;
-
-      CubeState nextStep = searchGraph.pop();
-
-      if (cubeEquals(SOLUTION, nextStep.getCube())) {
-        System.out.println(nextStep.getPath());
-        break;
+    try {
+      Set<CubeState> solvableStates = new HashSet<>();
+      Scanner scanner = new Scanner(new FileInputStream("solvable.txt"));
+      while (scanner.hasNextLine()) {
+        solvableStates.add(new CubeState(scanner.nextLine().toCharArray(), 0, ""));
       }
 
-      if (nextStep.getDepth() >= 6) {
-        continue;
+      boolean solvable = true;
+      while (!searchGraph.isEmpty()) {
+        CubeState nextStep = searchGraph.remove();
+
+        if (cubeEquals(SOLUTION, nextStep.getCube())) {
+          System.out.println(nextStep.getPath());
+          break;
+        }
+
+        if (solvable && solvableStates.contains(nextStep)) {
+          solvable = false;
+          searchGraph.clear();
+          searchGraph.add(new CubeState(nextStep.getCube(), 0, nextStep.getPath()));
+          continue;
+        }
+
+        // Avoid blowing the heap
+        if (nextStep.getDepth() > 5) {
+          continue;
+        }
+
+        if (!seenBefore.contains(nextStep)) {
+          seenBefore.add(nextStep);
+          searchGraph.add(new CubeState(U_PRIME(nextStep.getCube()), nextStep.getDepth() + 1, nextStep.getPath() + "U' "));
+          searchGraph.add(new CubeState(D_PRIME(nextStep.getCube()), nextStep.getDepth() + 1, nextStep.getPath() + "D' "));
+          searchGraph.add(new CubeState(F_PRIME(nextStep.getCube()), nextStep.getDepth() + 1, nextStep.getPath() + "F' "));
+          searchGraph.add(new CubeState(B_PRIME(nextStep.getCube()), nextStep.getDepth() + 1, nextStep.getPath() + "B' "));
+          searchGraph.add(new CubeState(L_PRIME(nextStep.getCube()), nextStep.getDepth() + 1, nextStep.getPath() + "L' "));
+          searchGraph.add(new CubeState(R_PRIME(nextStep.getCube()), nextStep.getDepth() + 1, nextStep.getPath() + "R' "));
+          searchGraph.add(new CubeState(U(nextStep.getCube()), nextStep.getDepth() + 1, nextStep.getPath() + "U "));
+          searchGraph.add(new CubeState(D(nextStep.getCube()), nextStep.getDepth() + 1, nextStep.getPath() + "D "));
+          searchGraph.add(new CubeState(F(nextStep.getCube()), nextStep.getDepth() + 1, nextStep.getPath() + "F "));
+          searchGraph.add(new CubeState(B(nextStep.getCube()), nextStep.getDepth() + 1, nextStep.getPath() + "B "));
+          searchGraph.add(new CubeState(L(nextStep.getCube()), nextStep.getDepth() + 1, nextStep.getPath() + "L "));
+          searchGraph.add(new CubeState(R(nextStep.getCube()), nextStep.getDepth() + 1, nextStep.getPath() + "R "));
+        }
       }
 
-      if (!seenBefore.contains(nextStep)) {
-        seenBefore.add(nextStep);
-        searchGraph.add(new CubeState(U_PRIME(nextStep.getCube()), nextStep.getDepth() + 1, nextStep.getPath() + "U' "));
-        searchGraph.add(new CubeState(D_PRIME(nextStep.getCube()), nextStep.getDepth() + 1, nextStep.getPath() + "D' "));
-        searchGraph.add(new CubeState(F_PRIME(nextStep.getCube()), nextStep.getDepth() + 1, nextStep.getPath() + "F' "));
-        searchGraph.add(new CubeState(B_PRIME(nextStep.getCube()), nextStep.getDepth() + 1, nextStep.getPath() + "B' "));
-        searchGraph.add(new CubeState(L_PRIME(nextStep.getCube()), nextStep.getDepth() + 1, nextStep.getPath() + "L' "));
-        searchGraph.add(new CubeState(R_PRIME(nextStep.getCube()), nextStep.getDepth() + 1, nextStep.getPath() + "R' "));
-        searchGraph.add(new CubeState(U(nextStep.getCube()), nextStep.getDepth() + 1, nextStep.getPath() + "U "));
-        searchGraph.add(new CubeState(D(nextStep.getCube()), nextStep.getDepth() + 1, nextStep.getPath() + "D "));
-        searchGraph.add(new CubeState(F(nextStep.getCube()), nextStep.getDepth() + 1, nextStep.getPath() + "F "));
-        searchGraph.add(new CubeState(B(nextStep.getCube()), nextStep.getDepth() + 1, nextStep.getPath() + "B "));
-        searchGraph.add(new CubeState(L(nextStep.getCube()), nextStep.getDepth() + 1, nextStep.getPath() + "L "));
-        searchGraph.add(new CubeState(R(nextStep.getCube()), nextStep.getDepth() + 1, nextStep.getPath() + "R "));
-      }
+    } catch (IOException e) {
+      // Ignored
     }
   }
 
@@ -108,7 +95,15 @@ public class RubiksSolverApplication {
     }
 
     @Override
-    // Need to implement hashcode
+    public int hashCode() {
+      int hashCode = 0;
+      for (int i = 0; i < this.cube.length; ++i) {
+        hashCode = 37 * hashCode + (int) this.cube[i];
+      }
+      return hashCode;
+    }
+
+    @Override
     public boolean equals(Object that) {
       if (that instanceof CubeState) {
         return cubeEquals(this.cube, ((CubeState) that).cube);
@@ -137,7 +132,7 @@ public class RubiksSolverApplication {
   //  33     34     35     36     37      38      39     40     41     42     43     44
   //                       45     46      47
   //                       48     49      50
-  //                       51     52     53
+  //                       51     52      53
 
   private static char[] correctness = new char[] {
     'o', 'y', 'w',
@@ -540,14 +535,6 @@ public class RubiksSolverApplication {
     return copy;
   }
 
-  private static List<Character> toList(char[] arr) {
-    List<Character> l = new ArrayList<>(arr.length);
-    for (Character c : arr) {
-      l.add(c);
-    }
-    return l;
-  }
-
   private static final char[] SOLUTION = new char[] {
     'r', 'r', 'r',
     'r', 'r', 'r',
@@ -598,33 +585,38 @@ public class RubiksSolverApplication {
     System.out.println();
   }
 
+  private static void printCubeFlat(char[] cube) {
+    for (int i = 0; i < cube.length; ++i) {
+      System.out.print(cube[i]);
+    }
+    System.out.println();
+  }
+
   private static boolean cubeEquals(char[] cube1, char[] cube2) {
     return Arrays.equals(cube1, cube2);
   }
 
-  //                       0      1       2
-  //                       3      4       5
-  //                       6      7       8
-  //  9      10     11     12     13      14      15     16     17     18     19     20
-  //  21     22     23     24     25      26      27     28     29     30     31     32
-  //  33     34     35     36     37      38      39     40     41     42     43     44
-  //                       45     46      47
-  //                       48     49      50
-  //                       51     52     53
+  private static char[] shuffle(char[] startCube, int steps) {
+    char[] copy = copyOf(startCube);
+    List<Function<char[], char[]>> operations = new ArrayList<>();
 
-  private static final int[] redFace = new int[] { 0, 1, 2, 3, 4, 5, 6, 7, 8 };
-  private static final int[] blueFace = new int[] { 9, 10, 11, 21, 22, 23 };
-  private static final int[] whiteFace = new int[] { 12, 13, 14, 24, 25, 26, 36, 37, 38 };
-  private static final int[] greenFace = new int[] { };
-  private static final int[] yellowFace = new int[] {};
-  private static final int[] orangeFace = new int[] {};
-  private static int solvedness(char[] cube) {
-    int score = 0;
-    for (int y : yellowFace) {
-      if (cube[y] == 'y') {
-        ++score;
-      }
+    operations.add((cube) -> { return U(cube); });
+    operations.add((cube) -> { return U_PRIME(cube); });
+    operations.add((cube) -> { return D(cube); });
+    operations.add((cube) -> { return D_PRIME(cube); });
+    operations.add((cube) -> { return F(cube); });
+    operations.add((cube) -> { return F_PRIME(cube); });
+    operations.add((cube) -> { return B(cube); });
+    operations.add((cube) -> { return B_PRIME(cube); });
+    operations.add((cube) -> { return L(cube); });
+    operations.add((cube) -> { return L_PRIME(cube); });
+    operations.add((cube) -> { return R(cube); });
+    operations.add((cube) -> { return R_PRIME(cube); });
+
+    for (int i = 0; i < steps; ++i) {
+      int idx = ThreadLocalRandom.current().nextInt(0, 12);
+      copy = operations.get(idx).apply(copy);
     }
-    return 0;
+    return copy;
   }
 }
