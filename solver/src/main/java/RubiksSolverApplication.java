@@ -3,21 +3,24 @@ import java.io.IOException;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
+import java.util.PriorityQueue;
+import java.util.Queue;
 import java.util.Scanner;
 import java.util.Set;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.function.Function;
 
 public class RubiksSolverApplication {
-  private static final ArrayDeque<CubeState> searchGraph = new ArrayDeque<>();
+  private static final Queue<CubeState> searchGraph = new ArrayDeque<>();
   private static final Set<CubeState> seenBefore = new HashSet<>();
 
   public static void main(String[] args) throws InterruptedException {
     List<char[]> arr = new ArrayList<>();
     arr.add(cube);
-    char[] shuffled = shuffle(SOLUTION, 16);
+    char[] shuffled = shuffle(SOLUTION, 8);
 
     printCube(shuffled);
     searchGraph.add(new CubeState(shuffled, 0, ""));
@@ -32,23 +35,33 @@ public class RubiksSolverApplication {
       boolean solvable = true;
       while (!searchGraph.isEmpty()) {
         CubeState nextStep = searchGraph.remove();
+        // System.out.println(scoreFirstLayer(nextStep.getCube()));
+
+        if (isFirstLayerDone(nextStep.getCube())) {
+          System.out.println(scoreFirstLayer(nextStep.getCube()));
+          System.out.println("Found first layer solution");
+          System.out.println(nextStep.getPath());
+          break;
+        }
 
         if (cubeEquals(SOLUTION, nextStep.getCube())) {
           System.out.println(nextStep.getPath());
           break;
         }
 
-        if (solvable && solvableStates.contains(nextStep)) {
-          solvable = false;
-          searchGraph.clear();
-          searchGraph.add(new CubeState(nextStep.getCube(), 0, nextStep.getPath()));
-          continue;
-        }
+        // if (solvable && solvableStates.contains(nextStep)) {
+        //   System.out.println("Found solvable state");
+        //   solvable = false;
+        //   searchGraph.clear();
+        //   searchGraph.add(new CubeState(nextStep.getCube(), 0, nextStep.getPath()));
+        //   // continue;
+        //   break;
+        // }
 
         // Avoid blowing the heap
-        if (nextStep.getDepth() > 5) {
-          continue;
-        }
+        // if (nextStep.getDepth() > 5) {
+        //   continue;
+        // }
 
         if (!seenBefore.contains(nextStep)) {
           seenBefore.add(nextStep);
@@ -72,7 +85,7 @@ public class RubiksSolverApplication {
     }
   }
 
-  private static class CubeState {
+  private static class CubeState implements Comparable<CubeState> {
     private final char[] cube;
     private final int depth;
     private final String path;
@@ -110,6 +123,11 @@ public class RubiksSolverApplication {
       }
       return false;
     }
+
+    @Override
+    public int compareTo(CubeState that) {
+      return scoreFirstLayer(that.cube) - scoreFirstLayer(this.cube);
+    }
   }
 
   private static char[] cube = new char[] {
@@ -123,16 +141,6 @@ public class RubiksSolverApplication {
     'o', 'o', 'o',
     'o', 'o', 'o'
   };
-
-  //                       0      1       2
-  //                       3      4       5
-  //                       6      7       8
-  //  9      10     11     12     13      14      15     16     17     18     19     20
-  //  21     22     23     24     25      26      27     28     29     30     31     32
-  //  33     34     35     36     37      38      39     40     41     42     43     44
-  //                       45     46      47
-  //                       48     49      50
-  //                       51     52      53
 
   private static char[] correctness = new char[] {
     'o', 'y', 'w',
@@ -535,6 +543,16 @@ public class RubiksSolverApplication {
     return copy;
   }
 
+
+  //                       0      1       2
+  //                       3      4       5
+  //                       6      7       8
+  //  9      10     11     12     13      14      15     16     17     18     19     20
+  //  21     22     23     24     25      26      27     28     29     30     31     32
+  //  33     34     35     36     37      38      39     40     41     42     43     44
+  //                       45     46      47
+  //                       48     49      50
+  //                       51     52      53
   private static final char[] SOLUTION = new char[] {
     'r', 'r', 'r',
     'r', 'r', 'r',
@@ -596,6 +614,57 @@ public class RubiksSolverApplication {
     return Arrays.equals(cube1, cube2);
   }
 
+  private static boolean isFirstLayerDone(char[] cube) {
+    final char[] row1 = new char[] {      'r', 'r', 'r'      };
+    final char[] row2 = new char[] { 'b', 'w', 'w', 'w', 'g' };
+    final char[] row3 = new char[] {      'o', 'o', 'o'      };
+    return cubeEquals(row1, Arrays.copyOfRange(cube, 6, 9))
+      && cubeEquals(row2, Arrays.copyOfRange(cube, 11, 16))
+      && cubeEquals(row2, Arrays.copyOfRange(cube, 23, 28))
+      && cubeEquals(row2, Arrays.copyOfRange(cube, 35, 40))
+      && cubeEquals(row3, Arrays.copyOfRange(cube, 45, 48));
+  }
+
+  private static int scoreFirstLayer(char[] cube) {
+    int score = 0;
+    for (int i = 1; i < 4; ++i) {
+      if (cube[12 * i - 1] == 'b') {
+        ++score;
+      }
+    }
+    for (int i = 1; i < 4; ++i) {
+      if (cube[12 * i + 3] == 'g') {
+        ++score;
+      }
+    }
+    for (int i = 6; i < 9; ++i) {
+      if (cube[i] == 'r') {
+        ++score;
+      }
+    }
+    for (int i = 12; i < 15; ++i) {
+      if (cube[i] == 'w') {
+        ++score;
+      }
+    }
+    for (int i = 24; i < 27; ++i) {
+      if (cube[i] == 'w') {
+        ++score;
+      }
+    }
+    for (int i = 36; i < 39; ++i) {
+      if (cube[i] == 'w') {
+        ++score;
+      }
+    }
+    for (int i = 45; i < 48; ++i) {
+      if (cube[i] == 'o') {
+        ++score;
+      }
+    }
+    return score;
+  }
+
   private static char[] shuffle(char[] startCube, int steps) {
     char[] copy = copyOf(startCube);
     List<Function<char[], char[]>> operations = new ArrayList<>();
@@ -619,4 +688,5 @@ public class RubiksSolverApplication {
     }
     return copy;
   }
+
 }
