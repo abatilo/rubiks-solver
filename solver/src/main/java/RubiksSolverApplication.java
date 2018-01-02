@@ -35,10 +35,8 @@ public class RubiksSolverApplication {
       boolean solvable = true;
       while (!searchGraph.isEmpty()) {
         CubeState nextStep = searchGraph.remove();
-        // System.out.println(scoreFirstLayer(nextStep.getCube()));
 
         if (isFirstLayerDone(nextStep.getCube())) {
-          System.out.println(scoreFirstLayer(nextStep.getCube()));
           System.out.println("Found first layer solution");
           System.out.println(nextStep.getPath());
           break;
@@ -85,7 +83,7 @@ public class RubiksSolverApplication {
     }
   }
 
-  private static class CubeState implements Comparable<CubeState> {
+  private static class CubeState {
     private final char[] cube;
     private final int depth;
     private final String path;
@@ -124,10 +122,6 @@ public class RubiksSolverApplication {
       return false;
     }
 
-    @Override
-    public int compareTo(CubeState that) {
-      return scoreFirstLayer(that.cube) - scoreFirstLayer(this.cube);
-    }
   }
 
   private static char[] cube = new char[] {
@@ -623,46 +617,6 @@ public class RubiksSolverApplication {
       && cubeEquals(row2, Arrays.copyOfRange(cube, 23, 28))
       && cubeEquals(row2, Arrays.copyOfRange(cube, 35, 40))
       && cubeEquals(row3, Arrays.copyOfRange(cube, 45, 48));
-  }
-
-  private static int scoreFirstLayer(char[] cube) {
-    int score = 0;
-    for (int i = 1; i < 4; ++i) {
-      if (cube[12 * i - 1] == 'b') {
-        ++score;
-      }
-    }
-    for (int i = 1; i < 4; ++i) {
-      if (cube[12 * i + 3] == 'g') {
-        ++score;
-      }
-    }
-    for (int i = 6; i < 9; ++i) {
-      if (cube[i] == 'r') {
-        ++score;
-      }
-    }
-    for (int i = 12; i < 15; ++i) {
-      if (cube[i] == 'w') {
-        ++score;
-      }
-    }
-    for (int i = 24; i < 27; ++i) {
-      if (cube[i] == 'w') {
-        ++score;
-      }
-    }
-    for (int i = 36; i < 39; ++i) {
-      if (cube[i] == 'w') {
-        ++score;
-      }
-    }
-    for (int i = 45; i < 48; ++i) {
-      if (cube[i] == 'o') {
-        ++score;
-      }
-    }
-    return score;
   }
 
   private static char[] shuffle(char[] startCube, int steps) {
