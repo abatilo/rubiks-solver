@@ -10,12 +10,9 @@ import java.util.Set;
 public class RubiksSolverApplication {
 
   public static void main(String[] args) throws InterruptedException {
-    List<char[]> arr = new ArrayList<>();
-    arr.add(cube);
     ArrayDeque<CubeState> searchGraph = new ArrayDeque<>();
     Set<CubeState> seenBefore = new HashSet<>();
     char[] shuffled = CubeOperations.shuffle(CubeOperations.SOLUTION, 16);
-
     CubeOperations.printCube(shuffled);
     searchGraph.add(new CubeState(shuffled, 0, ""));
 
@@ -68,17 +65,5 @@ public class RubiksSolverApplication {
       // Ignored
     }
   }
-
-  private static char[] cube = new char[] {
-    'r', 'r', 'r',
-    'r', 'r', 'r',
-    'r', 'r', 'r',
-    'b', 'b', 'b', 'w', 'w', 'w', 'g', 'g', 'g', 'y', 'y', 'y',
-    'b', 'b', 'b', 'w', 'w', 'w', 'g', 'g', 'g', 'y', 'y', 'y',
-    'b', 'b', 'b', 'w', 'w', 'w', 'g', 'g', 'g', 'y', 'y', 'y',
-    'o', 'o', 'o',
-    'o', 'o', 'o',
-    'o', 'o', 'o'
-  };
 
 }
