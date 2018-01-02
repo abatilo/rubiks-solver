@@ -8,12 +8,12 @@ import java.util.Scanner;
 import java.util.Set;
 
 public class RubiksSolverApplication {
-  private static final ArrayDeque<CubeState> searchGraph = new ArrayDeque<>();
-  private static final Set<CubeState> seenBefore = new HashSet<>();
 
   public static void main(String[] args) throws InterruptedException {
     List<char[]> arr = new ArrayList<>();
     arr.add(cube);
+    ArrayDeque<CubeState> searchGraph = new ArrayDeque<>();
+    Set<CubeState> seenBefore = new HashSet<>();
     char[] shuffled = CubeOperations.shuffle(CubeOperations.SOLUTION, 16);
 
     CubeOperations.printCube(shuffled);
